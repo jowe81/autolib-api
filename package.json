@@ -1,0 +1,15 @@
+{
+  "name": "autolib-api",
+  "version": "1.0.0",
+  "description": "Backend for AutoLib",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "pg": "^8.7.3"
+  }
+}
