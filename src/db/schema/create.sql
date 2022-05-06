@@ -1,0 +1,70 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
+DROP TABLE IF EXISTS resources CASCADE;
+DROP TABLE IF EXISTS authors CASCADE;
+DROP TABLE IF EXISTS authors_resources CASCADE;
+DROP TABLE IF EXISTS genres CASCADE;
+DROP TABLE IF EXISTS genres_resources CASCADE;
+
+
+CREATE TYPE resource_status AS ENUM ('available', 'requested', 'in use', 'retired');
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY NOT NULL,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  street_address VARCHAR(255) NOT NULL,
+  zip_code VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  province VARCHAR(255) NOT NULL,
+  country VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE resources (
+  id SERIAL PRIMARY KEY NOT NULL,
+  isbn VARCHAR(255),
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  cover_image VARCHAR(255),  
+  current_possessor_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  status resource_status DEFAULT 'available',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE requests (
+  id SERIAL PRIMARY KEY NOT NULL,
+  resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
+  requester_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  current_possessor_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE authors (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE genres (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE authors_resources (
+  id SERIAL PRIMARY KEY NOT NULL,
+  resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
+  author_id INTEGER REFERENCES authors(id) ON DELETE CASCADE
+);
+
+CREATE TABLE genres_resources (
+  id SERIAL PRIMARY KEY NOT NULL,
+  resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
+  genre_id INTEGER REFERENCES genres(id) ON DELETE CASCADE
+);
