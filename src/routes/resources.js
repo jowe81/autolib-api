@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const helpers = require("../modules/helpers");
 
-module.exports = (db, updateAppointment) => {
+module.exports = (db) => {
 
   const resources = require("../modules/resources")(db);
 
