@@ -98,6 +98,9 @@ module.exports = (db) => {
     if (query.current_possessor_id) {
       where += ` AND resources.current_possessor_id = ${helpers.sanitizeId(query.current_possessor_id)}`;
     }
+    if (where) {
+      where = `WHERE TRUE${where}`;
+    }
 
     //Assemble ORDER BY clause
     let order = ``;
@@ -126,7 +129,6 @@ module.exports = (db) => {
     JOIN genres ON genres_resources.genre_id = genres.id
     ${where} ${order} ${limit}
     `;
-
     return q;
   };
 
