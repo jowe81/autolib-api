@@ -1,3 +1,5 @@
+const helpers = require("../modules/helpers");
+
 module.exports = (db) => {
 
   /**
@@ -19,7 +21,8 @@ module.exports = (db) => {
             authors.push(record.name);
           });
           resolve(authors);
-        });
+        })
+        .catch(err => reject(err));
     });
   };
 
@@ -42,7 +45,8 @@ module.exports = (db) => {
             genres.push(record.name);
           });
           resolve(genres);
-        });
+        })
+        .catch(err => reject(err));
     });
   };
 
@@ -52,7 +56,7 @@ module.exports = (db) => {
    * @returns an object with resource information
    */
   const getResourceObject = (resourceId) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ resourceId ])
         .then(({ rows: records }) => {
           if (records.length > 0) {
@@ -65,8 +69,65 @@ module.exports = (db) => {
           } else {
             resolve({});
           }
-        });
+        })
+        .catch(err => reject(err));
     });
+  };
+
+  /**
+   * Build a search query based on req.query options
+   * @param {object} query the req.query object
+   * @returns SQL string
+   */
+  const buildResourceSearchQuery = query => {
+
+    //Assemble WHERE clause
+    let where = ``;
+    if (query.title) {
+      where += ` AND LOWER(resources.title) LIKE '%${helpers.lowerAndEscape(query.title)}%'`;
+    }
+    if (query.author) {
+      where += ` AND LOWER(authors.name) LIKE '%${helpers.lowerAndEscape(query.author)}%'`;
+    }
+    if (query.genre) {
+      where += ` AND LOWER(genres.name) LIKE '%${helpers.lowerAndEscape(query.genre)}%'`;
+    }
+    if (query.owner_id) {
+      where += ` AND resources.owner_id = ${helpers.sanitizeId(query.owner_id)}`;
+    }
+    if (query.current_possessor_id) {
+      where += ` AND resources.current_possessor_id = ${helpers.sanitizeId(query.current_possessor_id)}`;
+    }
+
+    //Assemble ORDER BY clause
+    let order = ``;
+    switch (query.order_by) {
+    case "created_at":
+      //Recent additions first
+      order = `ORDER BY created_at DESC`;
+      break;
+    case "title":
+      order = `ORDER BY title`;
+      break;
+    case "id":
+      order = `ORDER BY id`;
+      break;
+    }
+
+    //Assemble LIMIT clause
+    const limit = query.limit && query.limit > 0 ? `LIMIT ${query.limit}` : ``;
+
+    let q = `
+    SELECT DISTINCT resources.title, resources.id, resources.created_at
+    FROM authors 
+    JOIN authors_resources ON authors_resources.author_id = authors.id 
+    JOIN resources ON authors_resources.resource_id = resources.id
+    JOIN genres_resources ON genres_resources.resource_id = resources.id
+    JOIN genres ON genres_resources.genre_id = genres.id
+    ${where} ${order} ${limit}
+    `;
+
+    return q;
   };
 
   /**
@@ -74,26 +135,10 @@ module.exports = (db) => {
    * @param {object} object containing orderby and limit properties
    * @returns an array with resource information objects
    */
-  const getAll = ({orderby, limit}) => {
-    return new Promise((resolve, reject) => {
-      let _order = "";
-      switch (orderby) {
-      case "created_at":
-        //Recent additions first
-        _order = "ORDER BY created_at DESC";
-        break;
-      case "title":
-        _order = "ORDER BY title";
-        break;
-      }
-      const _limit = limit && limit > 0 ? `LIMIT ${limit}` : ``;
-
-      const query = {
-        text: `SELECT id,title,created_at FROM resources ${_order} ${_limit}`,
-      };
-      console.log(query.text);
-
-      db.query(query)
+  const getAll = (query) => {
+    return new Promise((resolve) => {
+      const queryString = buildResourceSearchQuery(query);
+      db.query(queryString)
         .then(({ rows: resources }) => {
           const promises = [];
           resources.forEach(resource => {
@@ -103,7 +148,6 @@ module.exports = (db) => {
             resolve(resources);
           });
         });
-
     });
   };
 
