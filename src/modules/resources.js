@@ -39,9 +39,8 @@ module.exports = (db) => {
   };
 
   const getResourceObject = (resourceId) => {
-    const id = parseInt(resourceId) > 0 ? parseInt(resourceId) : 0;
     return new Promise((resolve) => {
-      db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ id ])
+      db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ resourceId ])
         .then(({ rows: records }) => {
           if (records.length > 0) {
             const record = records[0];
