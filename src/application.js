@@ -10,7 +10,9 @@ const app = express();
 
 const db = require("./db");
 
+
 const users = require("./routes/users");
+const resources = require("./routes/resources");
 
 const read = (file) => {
   return new Promise((resolve, reject) => {
@@ -27,15 +29,15 @@ const read = (file) => {
   });
 };
 
-module.exports = function application(
-  ENV,
-  actions = { updateAppointment: () => {} }
-) {
+
+
+const application = (ENV) => {
   app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
 
   app.use("/api", users(db));
+  app.use("/api", resources(db));
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
@@ -63,3 +65,5 @@ module.exports = function application(
 
   return app;
 };
+
+module.exports = application;
