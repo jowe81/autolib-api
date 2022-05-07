@@ -1,5 +1,47 @@
 # API Backend for AutoLib
-...description to come
+Currently in development.
+
+To run:
+1. Clone repository and change into app directory
+```
+  git clone https://github.com/jowe81/autolib-api && cd autolib-api
+```
+2. Create .env file
+```
+  cp .env.example .env.development
+```
+
+3. If needed, adjust ```.env.development``` to match your Postgres configuration
+
+4. Install with dev dependencies
+```
+  npm install --dev
+```
+
+5. Create the database:
+```
+  psql
+  CREATE DATABASE autolib_development;
+```
+
+6. Start the API server
+```
+  npm run dev
+```
+
+7. _IMPORTANT_: Visit http://localhost:8001/api/debug/reset to create the tables and seed the database
+
+---
+---
+## Dev Updates:
+May 6
+- Created some seed data 
+- GET /api/debug/reset now functional
+- GET /api/resources now functional, with parameters as described below
+- GET /api/resouces/:id now functional
+
+---
+---
 
 # API Documentation
 ## Resources
