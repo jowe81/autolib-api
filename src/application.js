@@ -5,6 +5,7 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -32,6 +33,7 @@ const read = (file) => {
 
 
 const application = (ENV) => {
+  app.use(morgan('tiny'));
   app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
