@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS genres CASCADE;
 DROP TABLE IF EXISTS genres_resources CASCADE;
 
 
+DROP TYPE IF EXISTS resource_status;
 CREATE TYPE resource_status AS ENUM ('available', 'requested', 'in use', 'retired');
 
 CREATE TABLE users (
