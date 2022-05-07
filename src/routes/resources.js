@@ -20,5 +20,14 @@ module.exports = (db, updateAppointment) => {
       });
   });
 
+  router.post("/resources", (req, res) => {
+    resources.post(req.body)
+      .then(result => {
+        console.log("post result", result);
+        res.json(result);
+      });
+    
+  });
+
   return router;
 };
