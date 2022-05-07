@@ -34,6 +34,9 @@ To run:
 ---
 ---
 ## Dev Updates:
+May 7
+- GET /api/resources now supporting more filtering (parameters as described below)
+
 May 6
 - Created some seed data 
 - GET /api/debug/reset now functional
@@ -47,12 +50,19 @@ May 6
 ## Resources
 
 ### GET /api/resources
-#### Retrieve Catalogue of Resources
+#### Retrieve/Search Catalogue of Resources
 ```
 GET /api/resources                     #Get all
-GET /api/resources?limit=n             #Get a maximum of n records
-GET /api/resources?orderby=title       #Order by title
-GET /api/resources?orderby=created_at  #Order by most recently added
+GET /api/resources?limit=n             #Limit result set
+
+GET /api/resources?order_by=title      #Order by title
+GET /api/resources?order_by=created_at #Order by most recently added
+
+GET /api/resources?title=rings              #Search for title
+GET /api/resources?author=Tolkien           #Search by author
+GET /api/resources?genre=fantasy            #Search by genre
+GET /api/resources?owner_id=1               #Search by owner ID
+GET /api/resources?current_possessor_id=1   #Search by current possessor
 ```
 
 ### POST /api/resources 
