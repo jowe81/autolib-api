@@ -6,11 +6,7 @@ module.exports = (db, updateAppointment) => {
   const resources = require("../modules/resources")(db);
 
   router.get("/resources", (req, res) => {
-    const options = {
-      orderby: req.query.orderby,
-      limit: req.query.limit
-    };
-    resources.getAll(options)
+    resources.getAll(req.query)
       .then(resources => {
         res.json(resources);
       });
