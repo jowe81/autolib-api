@@ -153,9 +153,33 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Create a resource record with given data,
+   * return promise to record id
+   * @param {object} data
+   * @returns a promise to id of new record
+   */
+  const createResourceRecord = (data) => {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  };
+
+  /**
+   * Take data from post request and create new resource record
+   * @param {object} reqBody
+   * @returns a promise to the new resource id
+   */
+  const createNew = (reqBody) => {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  };
+
   return {
     getAll,
     getOne: getResourceObject,
+    createNew,
   };
   
 };
