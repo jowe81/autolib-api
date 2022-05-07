@@ -1,7 +1,10 @@
-
-
 module.exports = (db) => {
 
+  /**
+   * Get the names of the authors for a resource
+   * @param {integer} resourceId
+   * @returns an array of author's names
+   */
   const getAuthors = (resourceId) => {
     return new Promise((resolve, reject) => {
       const query = {
@@ -20,6 +23,11 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Get the genres for a resource
+   * @param {integer} resourceId
+   * @returns an array of genre names
+   */
   const getGenres = (resourceId) => {
     return new Promise((resolve, reject) => {
       const query = {
@@ -38,6 +46,11 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Get an object with all information on the resource, including author- and genre-arrays
+   * @param {integer} resourceId
+   * @returns an object with resource information
+   */
   const getResourceObject = (resourceId) => {
     return new Promise((resolve) => {
       db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ resourceId ])
@@ -56,6 +69,11 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Get data for all resources; order by title or most recent additions
+   * @param {object} object containing orderby and limit properties
+   * @returns an array with resource information objects
+   */
   const getAll = ({orderby, limit}) => {
     return new Promise((resolve, reject) => {
       let _order = "";
