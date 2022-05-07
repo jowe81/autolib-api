@@ -1,11 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS resources CASCADE;
-DROP TABLE IF EXISTS authors CASCADE;
-DROP TABLE IF EXISTS authors_resources CASCADE;
-DROP TABLE IF EXISTS genres CASCADE;
-DROP TABLE IF EXISTS genres_resources CASCADE;
-
 
 DROP TYPE IF EXISTS resource_status;
 CREATE TYPE resource_status AS ENUM ('available', 'requested', 'in use', 'retired');
@@ -27,6 +22,8 @@ CREATE TABLE resources (
   id SERIAL PRIMARY KEY NOT NULL,
   isbn VARCHAR(255),
   title VARCHAR(255) NOT NULL,
+  authors VARCHAR(255) NOT NULL,
+  genres VARCHAR(255),
   description TEXT,
   cover_image VARCHAR(255),  
   current_possessor_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -42,30 +39,4 @@ CREATE TABLE requests (
   requester_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   current_possessor_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
-);
-
-CREATE TABLE authors (
-  id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
-);
-
-CREATE TABLE genres (
-  id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
-);
-
-CREATE TABLE authors_resources (
-  id SERIAL PRIMARY KEY NOT NULL,
-  resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
-  author_id INTEGER REFERENCES authors(id) ON DELETE CASCADE
-);
-
-CREATE TABLE genres_resources (
-  id SERIAL PRIMARY KEY NOT NULL,
-  resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
-  genre_id INTEGER REFERENCES genres(id) ON DELETE CASCADE
 );
