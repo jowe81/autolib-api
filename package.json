@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "reset": "psql -U labber -d autolib_development < ./src/db/schema/create.sql && psql -U labber -d autolib_development < ./src/db/schema/development.sql"
   },
@@ -16,5 +17,8 @@
     "express": "^4.18.1",
     "helmet": "^5.0.2",
     "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
