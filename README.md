@@ -47,22 +47,55 @@ May 6
 ---
 
 # API Documentation
+## Debug/Reset
+### Recreate and seed database
+```
+GET /api/debug/reset
+```
 ## Resources
 
 ### GET /api/resources
 #### Retrieve/Search Catalogue of Resources
+##### Get all:
 ```
-GET /api/resources                     #Get all
-GET /api/resources?limit=n             #Limit result set
+#Get all
+GET /api/resources                     
 
-GET /api/resources?order_by=title      #Order by title
-GET /api/resources?order_by=created_at #Order by most recently added
+#Limit result set
+GET /api/resources?limit=n             
+```
+##### Filter:
+```
+#Search for title
+GET /api/resources?title=rings
 
-GET /api/resources?title=rings              #Search for title
-GET /api/resources?author=Tolkien           #Search by author
-GET /api/resources?genre=fantasy            #Search by genre
-GET /api/resources?owner_id=1               #Search by owner ID
-GET /api/resources?current_possessor_id=1   #Search by current possessor
+#Search by author
+GET /api/resources?author=Tolkien
+
+#Search by genre
+GET /api/resources?genre=fantasy
+
+#Search by owner ID
+GET /api/resources?owner_id=1
+
+#Search by current possessor
+GET /api/resources?current_possessor_id=1
+```
+##### Order results:
+```
+#Order by title
+GET /api/resources?order_by=title
+
+#Order by most recently added
+GET /api/resources?order_by=created_at 
+```
+
+
+### GET /api/resources/:id
+#### Retrieve a single resource record with related data
+##### Get the resource with id 3:
+```
+GET /api/resources/3
 ```
 
 ### POST /api/resources 
