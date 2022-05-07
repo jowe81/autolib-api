@@ -8,6 +8,16 @@ const sanitizeId = (id) => {
   return sanitizedId;
 };
 
+/**
+ * Return a string in lower case with single quotes doubled for Postgresql
+ * @param {string} s
+ * @returns a lower case string safe to insert into database
+ */
+const lowerAndEscape = s => {
+  return s.replaceAll(`'`, `''`).toLowerCase();
+};
+
 module.exports = {
-  sanitizeId
-}
+  sanitizeId,
+  lowerAndEscape,
+};
