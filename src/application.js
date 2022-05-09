@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+const cookieSession = require("cookie-session");
 const express = require("express");
 const bodyparser = require("body-parser");
 const helmet = require("helmet");
@@ -10,10 +11,6 @@ const morgan = require("morgan");
 const app = express();
 
 const db = require("./db");
-
-
-const users = require("./routes/users");
-const resources = require("./routes/resources");
 
 const read = (file) => {
   return new Promise((resolve, reject) => {
@@ -33,11 +30,24 @@ const read = (file) => {
 
 
 const application = (ENV) => {
+  
+  //Enable sessions
+  app.set('trust proxy', 1); // trust first proxy
+  app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+  }));
+
   app.use(morgan('tiny'));
   app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
 
+  //Load Routes
+  const users = require("./routes/users");
+  const resources = require("./routes/resources");
+  const sessionRegister = require("./routes/sessionRegister");
+  app.use("/", sessionRegister(db));
   app.use("/api", users(db));
   app.use("/api", resources(db));
 
