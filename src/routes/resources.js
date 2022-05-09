@@ -9,6 +9,9 @@ module.exports = (db) => {
     resources.getAll(req.query)
       .then(resources => {
         res.json(resources);
+      })
+      .catch(err => {
+        res.status(500).send(err);
       });
   });
 
@@ -17,14 +20,19 @@ module.exports = (db) => {
     resources.getOne(id)
       .then(resource => {
         res.json(resource);
+      })
+      .catch(err => {
+        res.status(500).send(err);
       });
   });
 
   router.post("/resources", (req, res) => {
     resources.post(req.body)
       .then(result => {
-        console.log("post result", result);
         res.json(result);
+      })
+      .catch(err => {
+        res.status(500).send(err);
       });
     
   });
