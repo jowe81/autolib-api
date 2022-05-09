@@ -63,8 +63,9 @@ module.exports = (db) => {
       };
       db.query(query)
         .then(res => {
-          resolve(res);
-          helpers.lg(`Inserted new user ${res.rows[0].first_name} ${res.rows[0].last_name} with ID ${res.rows[0].id} successfully.`);
+          const newRecord = res.rows[0];
+          resolve(newRecord);
+          helpers.lg(`Inserted new user ${newRecord.first_name} ${newRecord.last_name} with ID ${newRecord.id} successfully.`);
         })
         .catch(err => {
           reject(err);
