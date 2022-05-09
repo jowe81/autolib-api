@@ -34,10 +34,43 @@ To run:
 ---
 ---
 ## Dev Updates:
-May 7
+May 9 (Johannes)
+- Schema: resources table now using strings for authors and genres fields (no separate tables)
+- POST /api/resources now working, expecting JSON data as follows (example):
+  ```
+  {
+    "isbn": "9780261102439",
+    "title": "The Lord of the Rings",
+    "authors": "J.R.R. Tolkien, Ian Holm, John Le Mesurier",
+    "description": "The most influential fantasy novel ever written.",
+    "genres": "Fiction, Fantasy"    
+  }
+  ```
+  - returns the newly created record or an error
+  - ```isbn```, ```title``` and ```authors``` are required
+  - ```description``` and ```genres``` are optional
+  - The fields ```cover_image```, ```current_possessor```, ```owner``` and ```status``` are optional at this time as well. We'll likely supply that data on the backend once we've figured out sessions.
+- GET /api/users now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
+- GET /api/users/:id now functional
+- POST /api/users now working, expecting JSON data as follows (example):
+  ```
+  {
+    "first_name": "Elizabeth",
+    "last_name": "Williams",
+    "email": "elizabeth@gmail.com",
+    "street_address": "507 E 6th Ave",
+    "zip_code": "V5T 1K9",
+    "province": "BC",
+    "city": "Vancouver",
+    "country": "Canada"
+  }
+  ```
+  - returns the newly created record or an error
+
+May 7 (Johannes)
 - GET /api/resources now supporting more filtering (parameters as described below)
 
-May 6
+May 6 (Johannes)
 - Created some seed data 
 - GET /api/debug/reset now functional
 - GET /api/resources now functional, with parameters as described below
