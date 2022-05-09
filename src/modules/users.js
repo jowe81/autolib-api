@@ -24,6 +24,25 @@ module.exports = (db) => {
     });
   };
 
+  const findByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `SELECT * FROM users WHERE email = $1`,
+        values: [ email ]
+      };
+      db.query(query)
+        .then(({ rows: records }) => {
+          if (records.length > 0) {
+            const record = records[0];
+            resolve(record);
+          } else {
+            reject(`Couldn't find a user with email ${email}`);
+          }
+        })
+        .catch(err => reject(err));
+    });
+  };
+
   /**
    * Get all user records
    * @returns an array with user records
@@ -77,6 +96,7 @@ module.exports = (db) => {
   return {
     getAll,
     getOne,
+    findByEmail,
     createNew,
   };
   
