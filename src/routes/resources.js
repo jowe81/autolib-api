@@ -27,7 +27,7 @@ module.exports = (db) => {
   });
 
   router.post("/resources", (req, res) => {
-    resources.post(req.body)
+    resources.createNew(req.body)
       .then(result => {
         res.json(result);
       })
