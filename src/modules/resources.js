@@ -4,9 +4,9 @@ module.exports = (db) => {
 
   
   /**
-   * Get an object with all information on the resource, including author- and genre-arrays
+   * Get an object with the resource record
    * @param {integer} resourceId
-   * @returns an object with resource information
+   * @returns an object with the resource record
    */
   const getOne = (resourceId) => {
     return new Promise((resolve, reject) => {
