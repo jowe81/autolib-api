@@ -1,3 +1,5 @@
+const ENV = require("../environment");
+
 /**
  * Return an integer >= 0
  * @param {any} id
@@ -17,7 +19,18 @@ const lowerAndEscape = s => {
   return s.replaceAll(`'`, `''`).toLowerCase();
 };
 
+/**
+ * Log to the console if in development mode
+ * @param {*} msg
+ */
+const lg = (msg) => {
+  if (ENV === "development") {
+    console.log(msg);
+  }
+};
+
 module.exports = {
   sanitizeId,
   lowerAndEscape,
+  lg,
 };
