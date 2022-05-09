@@ -94,11 +94,37 @@ module.exports = (db) => {
   /**
    * Take data from post request and create new resource record
    * @param {object} reqBody
-   * @returns a promise to the new resource id
+   * @returns a promise to the new returning record
    */
   const createNew = (reqBody) => {
     return new Promise((resolve, reject) => {
-      resolve();
+      const query = {
+        text: `
+          INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, status)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;
+        `,
+        values: [
+          reqBody.isbn,
+          reqBody.title,
+          reqBody.authors,
+          reqBody.genres,
+          reqBody.description,
+          reqBody.cover_image,
+          reqBody.current_possessor_id,
+          reqBody.owner_id,
+          reqBody.status
+        ]
+      };
+      db.query(query)
+        .then(res => {
+          const newRecord = res.rows[0];
+          resolve(newRecord);
+          helpers.lg(`Inserted new resource ${newRecord.title} with ID ${newRecord.id} successfully.`);
+        })
+        .catch(err => {
+          reject(err);
+          helpers.lg(err);
+        });
     });
   };
 
