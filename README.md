@@ -1,39 +1,21 @@
 # API Backend for AutoLib
 Currently in development.
 
-To run:
-1. Clone repository and change into app directory
-```
-  git clone https://github.com/jowe81/autolib-api && cd autolib-api
-```
-2. Create .env file
-```
-  cp .env.example .env.development
-```
-
-3. If needed, adjust ```.env.development``` to match your Postgres configuration
-
-4. Install with dev dependencies
-```
-  npm install --dev
-```
-
-5. Create the database:
-```
-  psql
-  CREATE DATABASE autolib_development;
-```
-
-6. Start the API server
-```
-  npm run dev
-```
-
-7. _IMPORTANT_: Visit http://localhost:8001/api/debug/reset to create the tables and seed the database
-
----
----
 ## Dev Updates:
+May 10 (Johannes)
+- POST /login now working. Expects object with email address. Sets session cookie.
+- GET /logout now working. Destroys session.
+- GET /me will return the current user record if session is logged in.
+- GET /api/openlibrary/by_isbn/:isbn now working. Takes any isbn10 or isbn13 an object of this form (or an error):
+  ```
+  {
+    isbn: "0596516681",
+    title: "Head First Servlets and JSP",
+    authors: "Bert Bates, Bryan Basham",
+    coverImage: "https://covers.openlibrary.org/b/isbn/9780596516680-L.jpg"
+  }
+  ```
+
 May 9 (Johannes)
 - Schema: resources table now using strings for authors and genres fields (no separate tables)
 - POST /api/resources now working, expecting JSON data as follows (example):
@@ -77,6 +59,36 @@ May 6 (Johannes)
 - GET /api/resouces/:id now functional
 
 ---
+## Installation Instructions:
+1. Clone repository and change into app directory
+```
+  git clone https://github.com/jowe81/autolib-api && cd autolib-api
+```
+2. Create .env file
+```
+  cp .env.example .env.development
+```
+
+3. If needed, adjust ```.env.development``` to match your Postgres configuration
+
+4. Install with dev dependencies
+```
+  npm install --dev
+```
+
+5. Create the database:
+```
+  psql
+  CREATE DATABASE autolib_development;
+```
+
+6. Start the API server
+```
+  npm run dev
+```
+
+7. _IMPORTANT_: Visit http://localhost:8001/api/debug/reset to create the tables and seed the database
+
 ---
 
 # API Documentation
@@ -140,18 +152,8 @@ GET /api/resources/3
   isbn: "9780261102439",
   title: "The Lord of the Rings",
   description: "The most influential fantasy novel ever written.",
-  authors: [
-    "J.R.R. Tolkien",
-    "Ian Holm",
-    "John Le Mesurier",
-    "Michael Hordern",
-    "Peter Woodthorpe",
-    "Robert Stephens"
-  ],
-  genres: [ 
-    "Fiction",
-    "Fantasy"
-  ]
+  authors: "J.R.R. Tolkien, Ian Holm, John Le Mesurier",
+  genres: "Fiction, Fantasy",  
 }
 
 ```
@@ -159,5 +161,6 @@ Optional fields:
 - owner_id (will default to current user)
 - current_possessor_id (will default to current user)
 - status (will default to 'available')
+- cover_image (URL)
 
 ##### Returns ID of newly created resource
