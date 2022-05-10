@@ -10,10 +10,10 @@ CREATE TABLE users (
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
-  street_address VARCHAR(255) 
-  zip_code VARCHAR(255) 
-  city VARCHAR(255)
-  province VARCHAR(255) 
+  street_address VARCHAR(255),
+  zip_code VARCHAR(255), 
+  city VARCHAR(255),
+  province VARCHAR(255), 
   country VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
