@@ -36,3 +36,9 @@ VALUES ('9781449399023','JavaScript & jQuery: The Missing Manual','David Sawyer 
 
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, status)
 VALUES ('9781449302399','HTML5: The Missing Manual','Matthew MacDonald', 'Programming, HTML5', 'HTML5 is more than a markup language. It is the future of the Web, and this book will get you there.','https://covers.openlibrary.org/b/isbn/9781449302399-M.jpg',2,3,'requested');
+
+
+INSERT INTO requests (resource_id, requester_id, current_possessor_id) VALUES (1, 1, 2);
+INSERT INTO requests (resource_id, requester_id, current_possessor_id) VALUES (2, 1, 3);
+INSERT INTO requests (resource_id, requester_id, current_possessor_id) VALUES (3, 2, 4);
+INSERT INTO requests (resource_id, requester_id, current_possessor_id) VALUES (4, 2, 2);
