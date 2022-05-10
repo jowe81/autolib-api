@@ -112,7 +112,7 @@ module.exports = (db) => {
           reqBody.cover_image,
           reqBody.current_possessor_id,
           ownerId,
-          reqBody.status
+          reqBody.status || 'available',
         ]
       };
       db.query(query)
