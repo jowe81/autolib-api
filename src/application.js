@@ -47,9 +47,11 @@ const application = (ENV) => {
   const users = require("./routes/users");
   const resources = require("./routes/resources");
   const sessionRegister = require("./routes/sessionRegister");
+  const openLibrary = require("./routes/openLibrary");
   app.use("/", sessionRegister(db));
   app.use("/api", users(db));
   app.use("/api", resources(db));
+  app.use("/api", openLibrary());
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
