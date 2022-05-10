@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const errorIfUnauthorized = require("../middleware/errorIfUnauthorized");
 const helpers = require("../modules/helpers");
 
 module.exports = (db) => {
@@ -26,15 +27,15 @@ module.exports = (db) => {
       });
   });
 
-  router.post("/resources", (req, res) => {
-    resources.createNew(req.body)
+  router.post("/resources", errorIfUnauthorized, (req, res) => {
+    const currentUserId = req.session.user.id;
+    resources.createNew(req.body, currentUserId)
       .then(result => {
         res.json(result);
       })
       .catch(err => {
         res.status(500).send(err);
       });
-    
   });
 
   return router;

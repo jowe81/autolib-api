@@ -42,7 +42,7 @@ const application = (ENV) => {
   app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
-
+  
   //Load Routes
   const users = require("./routes/users");
   const resources = require("./routes/resources");

@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const errorIfUnauthorized = require("../middleware/errorIfUnauthorized");
 const helpers = require("../modules/helpers");
 
 module.exports = (db) => {
 
   const users = require("../modules/users")(db);
 
-  router.get("/users", (req, res) => {
+  router.get("/users", errorIfUnauthorized, (req, res) => {
     users.getAll()
       .then(users => {
         res.json(users);
@@ -15,7 +16,7 @@ module.exports = (db) => {
       });
   });
 
-  router.get("/users/:id", (req, res) => {
+  router.get("/users/:id", errorIfUnauthorized, (req, res) => {
     const id = helpers.sanitizeId(req.params.id);
     users.getOne(id)
       .then(users => {

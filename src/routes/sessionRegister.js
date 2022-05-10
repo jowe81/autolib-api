@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const errorIfUnauthorized = require("../middleware/errorIfUnauthorized");
 const helpers = require("../modules/helpers");
 
 module.exports = (db) => {
@@ -17,20 +18,15 @@ module.exports = (db) => {
       });
   });
 
-  router.get("/logout", (req, res) => {
+  router.get("/logout", errorIfUnauthorized, (req, res) => {
     const firstName = req.session.user.first_name;
     res.end(`Goodbye, ${firstName}!`);
     req.session = null;
   });
 
-  router.get("/me", (req, res) => {
+  router.get("/me", errorIfUnauthorized, (req, res) => {
     res.json(req.session.user);
   });
-
-  router.post("/register", (req, res) => {
-    res.end("POST /register route");
-  });
-
 
   return router;
 };
