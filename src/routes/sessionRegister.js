@@ -23,6 +23,10 @@ module.exports = (db) => {
     req.session = null;
   });
 
+  router.get("/me", (req, res) => {
+    res.json(req.session.user);
+  });
+
   router.post("/register", (req, res) => {
     res.end("POST /register route");
   });
