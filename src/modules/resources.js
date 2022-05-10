@@ -96,7 +96,7 @@ module.exports = (db) => {
    * @param {object} reqBody
    * @returns a promise to the new returning record
    */
-  const createNew = (reqBody) => {
+  const createNew = (reqBody, ownerId) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `
@@ -111,7 +111,7 @@ module.exports = (db) => {
           reqBody.description,
           reqBody.cover_image,
           reqBody.current_possessor_id,
-          reqBody.owner_id,
+          ownerId,
           reqBody.status
         ]
       };
