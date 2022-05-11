@@ -33,6 +33,22 @@ module.exports = (db) => {
   };
 
   /**
+   * Check if a resource with given ID exists
+   * @param {integer} resourceId
+   * @returns promise to a boolean
+   */
+  const exists = (resourceId) => {
+    return new Promise((resolve, reject) => {
+      getOne(resourceId, false)
+        .then(resourceRecord => {
+          const exists = resourceRecord.id > 0 ? true : false;
+          resolve(exists);
+        })
+        .catch(err => reject(err));
+    });
+  };
+
+  /**
    * Build a search query based on req.query options
    * @param {object} query the req.query object
    * @returns SQL string
@@ -207,7 +223,7 @@ module.exports = (db) => {
                   const mostRecentRequest = completedRequests[0];
                   const daysSince = helpers.daysBetween(mostRecentRequest.completed_at, new Date());
                   const isAvailable = daysSince > process.env.BORROWING_SPAN_DAYS;
-                  helpers.lg(`  Latest completed request was completed ${daysSince} ago (borrowing span is ${process.env.BORROWING_SPAN_DAYS}).`);
+                  helpers.lg(`  Latest completed request was completed ${daysSince} days ago (borrowing span is ${process.env.BORROWING_SPAN_DAYS}).`);
                   if (isAvailable) {
                     status.text = 'available';
                     status.available = true;
@@ -235,6 +251,7 @@ module.exports = (db) => {
   return {
     getAll,
     getOne,
+    exists,
     createNew,
     getPendingRequests,
     getStatus,
