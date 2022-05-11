@@ -8,13 +8,22 @@ module.exports = (db) => {
    * @param {integer} resourceId
    * @returns an object with the resource record
    */
-  const getOne = (resourceId) => {
+  const getOne = (resourceId, withStatus = true) => {
     return new Promise((resolve, reject) => {
       db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ helpers.sanitizeId(resourceId) ])
         .then(({ rows: records }) => {
           if (records.length > 0) {
             const record = records[0];
-            resolve(record);
+            if (withStatus) {
+              getStatus(resourceId)
+                .then(status => {
+                  record.status = status;
+                  resolve(record);
+                })
+                .catch(err => reject(err));
+            } else {
+              resolve(record);
+            }
           } else {
             resolve({});
           }
@@ -128,10 +137,107 @@ module.exports = (db) => {
     });
   };
 
+  
+   
+
+  /**
+   * Get requests for a resource
+   * @param {integer} resourceId ID of the resource to check
+   * @param {string} status filter by status: pending or completed
+   * @returns a promise to an array of request records or an empty array
+   */
+
+  const getRequests = (resourceId, status) => {
+    const query = {
+      values: [ resourceId ]
+    };
+    if (status === 'pending') {
+      query.text = `SELECT * FROM requests WHERE resource_id = $1 AND completed_at IS NULL`;
+    } else {
+      query.text = `SELECT * FROM requests WHERE resource_id = $1 AND completed_at IS NOT NULL ORDER BY completed_at DESC`;
+    }
+    return new Promise((resolve, reject) => {
+      db.query(query)
+        .then(({rows: requestRecords}) => {
+          resolve(requestRecords);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+  
+  /**
+   * Get pending requests for a resource (should never be more than one)
+   * @param {integer} resourceId ID of the resource to check
+   * @returns a promise to an array of request records or an empty array
+   */
+  const getPendingRequests = (resourceId) => getRequests(resourceId, 'pending');
+
+  /**
+   * Get completed requests for a resource in descending chronological order
+   * @param {integer} resourceId ID of the resource to check
+   * @returns a promise to an array of request records or an empty array
+   */
+  const getCompletedRequests = (resourceId) => getRequests(resourceId, 'completed');
+
+  /**
+   * Get current status of a resource
+   * @param {integer} resourceId the ID of the resource to check
+   * @returns an object with a text property, and, for 'in use' resources, an availableAt property with a future date
+   * and a boolean available property
+   */
+  const getStatus = resourceId => {
+    return new Promise((resolve, reject) => {
+      const status = {};
+      status.available = false;
+      helpers.lg(`Fetching status for resource with id ${resourceId}...`);
+      getPendingRequests(resourceId)
+        .then(pendingRequests => {
+          if (pendingRequests && pendingRequests.length) {
+            helpers.lg(`  Resource has been requested (request ID: ${pendingRequests[0].id})`);
+            status.text = 'requested';
+            resolve(status);
+          } else {
+            helpers.lg("  No pending request - checking for completed ones...");
+            getCompletedRequests(resourceId)
+              .then(completedRequests => {
+                if (completedRequests && completedRequests.length) {
+                  helpers.lg(`  Resource has ${completedRequests.length} completed requests.`);
+                  const mostRecentRequest = completedRequests[0];
+                  const daysSince = helpers.daysBetween(mostRecentRequest.completed_at, new Date());
+                  const isAvailable = daysSince > process.env.BORROWING_SPAN_DAYS;
+                  helpers.lg(`  Latest completed request was completed ${daysSince} ago (borrowing span is ${process.env.BORROWING_SPAN_DAYS}).`);
+                  if (isAvailable) {
+                    status.text = 'available';
+                    status.available = true;
+                    helpers.lg(`  Resource is available.`);
+                  } else {
+                    status.text = 'in use';
+                    status.availableAt = helpers.addDays(mostRecentRequest.completed_at, process.env.BORROWING_SPAN_DAYS);
+                    helpers.lg(`  Resource is in use, will become available at ${status.availableAt}`);
+                  }
+                  resolve(status);
+                } else {
+                  status.text = 'available';
+                  status.available = true;
+                  helpers.lg(`  Resource has no completed requests either and is available.`);
+                  resolve(status);
+                }
+              })
+              .catch(err => reject(err));
+          }
+        })
+        .catch(err => reject(err));
+    });
+  };
+
   return {
     getAll,
     getOne,
     createNew,
+    getPendingRequests,
+    getStatus,
   };
   
 };
