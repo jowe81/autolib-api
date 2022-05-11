@@ -2,12 +2,6 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS resources CASCADE;
 
-DROP TYPE IF EXISTS resource_status;
-CREATE TYPE resource_status AS ENUM ('available', 'requested', 'in use', 'retired');
-
-DROP TYPE IF EXISTS request_status;
-CREATE TYPE request_status AS ENUM ('pending', 'completed');
-
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
   first_name VARCHAR(255) NOT NULL,
@@ -31,7 +25,6 @@ CREATE TABLE resources (
   cover_image VARCHAR(255),  
   current_possessor_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  status resource_status DEFAULT 'available',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
@@ -40,6 +33,6 @@ CREATE TABLE requests (
   id SERIAL PRIMARY KEY NOT NULL,
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
   requester_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  status request_status DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  completed_at TIMESTAMP 
 );
