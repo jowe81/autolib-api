@@ -47,12 +47,15 @@ module.exports = (db) => {
    * Get all user records
    * @returns an array with user records
    */
-  const getAll = (query) => {
-    return new Promise((resolve) => {
+  const getAll = () => {
+    return new Promise((resolve, reject) => {
       const queryString = `SELECT * FROM users;`;
       db.query(queryString)
         .then(({ rows: resources }) => {
           resolve(resources);
+        })
+        .catch(err => {
+          helpers.lg(err);
         });
     });
   };
@@ -93,11 +96,62 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Update user record with userId with data from put request
+   * @param {object} reqBody
+   * @param {integer} userId
+   * @returns a promise to the updated record
+   */
+  const update = (reqBody, userId) => {
+    return new Promise((resolve, reject) => {
+      getOne(userId)
+        .then(user => {
+          const query = {
+            text: `
+              UPDATE users  SET
+                first_name = $1,
+                last_name = $2,
+                email = $3,
+                street_address = $4,
+                zip_code = $5,
+                city = $6,
+                province = $7,
+                country = $8
+              WHERE id = $9
+              RETURNING *;
+            `,
+            values: [
+              reqBody.first_name,
+              reqBody.last_name,
+              reqBody.email,
+              reqBody.street_address,
+              reqBody.zip_code,
+              reqBody.city,
+              reqBody.province,
+              reqBody.country,
+              user.id,
+            ]
+          };
+          db.query(query)
+            .then(res => {
+              const updatedRecord = res.rows[0];
+              resolve(updatedRecord);
+              helpers.lg(`Updated user with ID ${userId} successfully.`);
+            })
+            .catch(err => {
+              reject(err);
+              helpers.lg(`Couldn't update user with ID ${userId}. ${err.detail}`);
+            });
+        });
+    });
+  };
+
   return {
     getAll,
     getOne,
     findByEmail,
     createNew,
+    update,
   };
   
 };
