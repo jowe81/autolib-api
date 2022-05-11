@@ -38,7 +38,12 @@ INSERT INTO resources (isbn, title, authors, genres, description, cover_image, c
 VALUES ('9781449302399','HTML5: The Missing Manual','Matthew MacDonald', 'Programming, HTML5', 'HTML5 is more than a markup language. It is the future of the Web, and this book will get you there.','https://covers.openlibrary.org/b/isbn/9781449302399-M.jpg',2,3);
 
 
-INSERT INTO requests (resource_id, requester_id) VALUES (1, 1);
-INSERT INTO requests (resource_id, requester_id) VALUES (2, 1);
-INSERT INTO requests (resource_id, requester_id, completed_at) VALUES (3, 2, '2022-05-11');
-INSERT INTO requests (resource_id, requester_id) VALUES (4, 2);
+INSERT INTO requests (resource_id, requester_id, created_at, completed_at) VALUES (1, 1, CURRENT_TIMESTAMP - INTERVAL '175 days', CURRENT_TIMESTAMP - INTERVAL '171 days');
+INSERT INTO requests (resource_id, requester_id, created_at, completed_at) VALUES (1, 1, CURRENT_TIMESTAMP - INTERVAL '75 days', CURRENT_TIMESTAMP - INTERVAL '73 days');
+INSERT INTO requests (resource_id, requester_id, created_at) VALUES (1, 1, CURRENT_TIMESTAMP - INTERVAL '30 days');
+
+INSERT INTO requests (resource_id, requester_id, created_at, completed_at) VALUES (2, 2, CURRENT_TIMESTAMP - INTERVAL '24 days', CURRENT_TIMESTAMP - INTERVAL '22 days');
+
+INSERT INTO requests (resource_id, requester_id, created_at, completed_at) VALUES (3, 2, CURRENT_TIMESTAMP - INTERVAL '4 days', CURRENT_TIMESTAMP - INTERVAL '3 days');
+
+
