@@ -2,6 +2,13 @@
 Currently in development.
 
 ## Dev Updates:
+May 11 (Johannes)
+- PUT /resources now working! Request will only succeed if resource is available, that is,
+  - it exists
+  - it does not have an open request
+  - it does not have a completed request that has completed less than env.BORROWING_SPAN_DAYS days ago
+  - For more detail see flow chart for dynamic status determination available at https://github.com/merwynpgithub/decentralized-library/blob/master/Requests%20and%20Resource%20Status.pdf
+
 May 10 (Johannes)
 - Schema adjustment! 
   - Redundant status fields have been removed from resources and requests tables
