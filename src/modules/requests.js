@@ -46,7 +46,8 @@ module.exports = (db) => {
         values: [resourceId, requesterId],
       };
       db.query(query)
-        .then(requestRecord => {
+        .then(res => {
+          const requestRecord = res.rows[0];
           helpers.lg(`Generated request record for resource ID ${resourceId}, requested by user with ID ${requesterId}.`);
           resolve(requestRecord);
         })
