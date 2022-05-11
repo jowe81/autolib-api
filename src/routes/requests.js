@@ -10,30 +10,19 @@ module.exports = (db) => {
   router.post("/requests", errorIfUnauthorized, (req, res) => {
     const userId = req.session.user.id;
     const resourceId = req.body.resourceId;
-    resources.exists(resourceId)
-      .then(exists => {
-        if (exists) {
-          resources.getStatus(resourceId)
-            .then(status => {
-              if (status.available) {
-                requests.createNew(resourceId, userId)
-                  .then(requestRecord => {
-                    res.json(requestRecord);
-                  })
-                  .catch(err => {
-                    res.status(500).end(err);
-                  });
-              } else {
-                helpers.lg(`Cannot create request.`);
-                res.json({ "error": "resource unavailable"});
-              }
+    resources.getOne(resourceId)
+      .then(resource => {
+        if (resource.status && resource.status.available) {
+          requests.createNew(resourceId, userId)
+            .then(requestRecord => {
+              res.json(requestRecord);
             })
             .catch(err => {
               res.status(500).end(err);
             });
         } else {
-          helpers.lg(`Resource with id ${resourceId} does not exist.`);
-          res.json({ "error": "resource does not exist"});
+          helpers.lg(`Cannot create request - resource is unavailable.`);
+          res.json({ "error": "resource unavailable"});
         }
       })
       .catch(err => {
