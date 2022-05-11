@@ -3,6 +3,15 @@ Currently in development.
 
 ## Dev Updates:
 May 10 (Johannes)
+- Schema adjustment! 
+  - Redundant status fields have been removed from resources and requests tables
+  - requests table has an added completed_at field (from which status can be inferred)
+  - Make sure to run /api/debug/reset before testing!
+- GET /resources will no longer have a status field for each resource
+- GET /resources/:id has status object (dynamically queried)
+- PUT /users now working. Expects full user object - fields missing in the user record will be deleted from database.
+
+May 9 (Johannes)
 - POST /login now working. Expects object with email address. Sets session cookie.
 - GET /logout now working. Destroys session.
 - GET /me will return the current user record if session is logged in.
@@ -12,11 +21,12 @@ May 10 (Johannes)
     isbn: "0596516681",
     title: "Head First Servlets and JSP",
     authors: "Bert Bates, Bryan Basham",
-    coverImage: "https://covers.openlibrary.org/b/isbn/9780596516680-L.jpg"
+    coverImage: "https://covers.openlibrary.org/b/isbn/9780596516680-L.jpg",
+    description: "An important book about programming..."
   }
   ```
 
-May 9 (Johannes)
+May 8 (Johannes)
 - Schema: resources table now using strings for authors and genres fields (no separate tables)
 - POST /api/resources now working, expecting JSON data as follows (example):
   ```
@@ -164,3 +174,9 @@ Optional fields:
 - cover_image (URL)
 
 ##### Returns ID of newly created resource
+
+---
+## Requests
+
+Flow for putting in a request:
+
