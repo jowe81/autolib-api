@@ -86,6 +86,12 @@ module.exports = (db) => {
     case "title":
       order = `ORDER BY title`;
       break;
+    case "authors":
+      order = `ORDER BY authors`;
+      break;
+    case "genres":
+      order = `ORDER BY genres`;
+      break;
     case "id":
       order = `ORDER BY id`;
       break;
@@ -104,14 +110,28 @@ module.exports = (db) => {
   /**
    * Get data for all resources; order by title or most recent additions
    * @param {object} object containing orderby and limit properties
+   * @param {boolean} withStatus retrieve the status for each resource
    * @returns a promise to an array with resource objects
    */
-  const getAll = (query) => {
+  const getAll = (query, withStatus = false) => {
     return new Promise((resolve, reject) => {
       const queryString = buildResourceSearchQuery(query);
       db.query(queryString)
         .then(({ rows: resources }) => {
-          resolve(resources);
+          if (withStatus) {
+            //This implementation is horribly inefficient; should determine status in SQL eventually!
+            const promises = [];
+            resources.forEach(resource => {
+              promises.push(getOne(resource.id));
+            });
+            Promise.all(promises)
+              .then(resources => {
+                resolve(resources);
+              })
+              .catch(err => reject(err));
+          } else {
+            resolve(resources);
+          }
         })
         .catch(err => reject(err));
     });
