@@ -7,6 +7,33 @@ module.exports = (db) => {
   const requests = require("../modules/requests")(db);
   const resources = require("../modules/resources")(db);
 
+  router.get("/requests/from_me_for_others", errorIfUnauthorized, (req, res) => {
+    requests.getByRequestingUser(req.session.user.id)
+      .then(requestRecords => {
+        helpers.lg(`Got ${requestRecords.length} requests that were initiated by ${req.session.user.email}`);
+        res.json(requestRecords);
+      })
+      .catch(err => res.status(500).end(err));
+  });
+
+  router.get("/requests/from_others_for_me", errorIfUnauthorized, (req, res) => {
+    requests.getByRequestedUser(req.session.user.id)
+      .then(requestRecords => {
+        helpers.lg(`Got a total of ${requestRecords.length} requests for ${req.session.user.email} (some may be completed).`);
+        res.json(requestRecords);
+      })
+      .catch(err => res.status(500).end(err));
+  });
+
+  router.get("/requests/from_others_for_me/pending", errorIfUnauthorized, (req, res) => {
+    requests.getByRequestedUser(req.session.user.id, true)
+      .then(requestRecords => {
+        helpers.lg(`Got ${requestRecords.length} pending requests for ${req.session.user.email}.`);
+        res.json(requestRecords);
+      })
+      .catch(err => res.status(500).end(err));
+  });
+
   router.put("/requests/:id/complete", errorIfUnauthorized, (req, res) => {
     const id = helpers.sanitizeId(req.params.id);
     requests.getOne(id)
