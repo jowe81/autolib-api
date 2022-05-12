@@ -3,6 +3,7 @@ Currently in development.
 
 ## Dev Updates:
 May 12 (Johannes)
+- ```GET /api/requests/from_me_for_others``` and related routes will now return details on the resource and the requested user for each request.
 - ```GET /api/resources/mine``` now working
 
 May 11 (Johannes)
