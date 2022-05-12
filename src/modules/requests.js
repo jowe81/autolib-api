@@ -50,7 +50,16 @@ module.exports = (db) => {
     const pendingOnly = pendingRequestsOnly ? `AND completed_at IS NULL` : ``;
     return new Promise((resolve, reject) => {
       const query = {
-        text: `SELECT * FROM requests WHERE requester_id = $1 ${pendingOnly} ORDER BY completed_at DESC, created_at`,
+        text: `
+          SELECT 
+              requests.*,
+              resources.title AS resource_title,
+              resources.cover_image AS resource_cover_image            
+            FROM requests 
+            JOIN resources ON requests.resource_id = resources.id
+            WHERE requester_id = $1 ${pendingOnly}
+            ORDER BY completed_at DESC, created_at
+        `,
         values: [ userId ]
       };
       db.query(query)
@@ -75,7 +84,15 @@ module.exports = (db) => {
       const pendingOnly = pendingRequestsOnly ? `AND completed_at IS NULL` : ``;
       const query = {
         text: `
-          SELECT requests.* FROM requests
+          SELECT
+              requests.*,
+              users.first_name AS requester_first_name,
+              users.last_name AS requester_last_name,
+              users.email AS requester_email,
+              resources.title AS resource_title,
+              resources.cover_image AS resource_cover_image            
+            FROM requests
+            JOIN users ON requests.requester_id = users.id
             JOIN resources ON requests.resource_id = resources.id
             WHERE resources.current_possessor_id = $1 ${pendingOnly}
             ORDER BY requests.completed_at DESC, requests.created_at
