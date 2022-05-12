@@ -47,9 +47,9 @@ const application = (ENV) => {
   const users = require("./routes/users");
   const resources = require("./routes/resources");
   const requests = require("./routes/requests");
-  const sessionRegister = require("./routes/sessionRegister");
+  const session = require("./routes/session");
   const openLibrary = require("./routes/openLibrary");
-  app.use("/", sessionRegister(db));
+  app.use("/", session(db));
   app.use("/api", users(db));
   app.use("/api", resources(db));
   app.use("/api", requests(db));
