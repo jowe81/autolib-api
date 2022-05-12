@@ -7,7 +7,7 @@ May 11 (Johannes)
 - ```GET /api/requests/from_me_for_others/pending``` now working; returns all requests initiated by the current user that are still pending.
 - ```GET /api/requests/from_others_for_me``` now working. Will return all requests FOR the current user (pending or completed)
 - ```GET /api/requests/from_others_for_me/pending``` now working. Get all pending requests FOR the current user.
-- ```POST /requests``` now working! Request creation will only succeed if resource is available, that is,
+- ```POST /api/requests``` now working! Request creation will only succeed if resource is available, that is,
   - it exists
   - it does not have an open request
   - it does not have a completed request that has completed less than env.BORROWING_SPAN_DAYS days ago
@@ -15,14 +15,14 @@ May 11 (Johannes)
 - ```PUT /requests/:id/complete``` now working. Request will be marked as completed
   - if the request is in fact open
   - if the client session user owns the request
+- ```GET /api/resources``` now supports ```?order_by=authors```, ```?order_by=genres```
 
 May 10 (Johannes)
 - Schema adjustment! 
   - Redundant status fields have been removed from resources and requests tables
   - requests table has an added completed_at field (from which status can be inferred)
   - Make sure to run /api/debug/reset before testing!
-- ```GET /resources``` will no longer have a status field for each resource
-- ```GET /resources/:id``` has status object (dynamically queried)
+- ```GET /resources``` and ```GET /resources/:id``` now have status object (dynamically queried) instead of string
 - ```PUT /users``` now working. Expects full user object - fields missing in the user record will be deleted from database.
 
 May 9 (Johannes)
