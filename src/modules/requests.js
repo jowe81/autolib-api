@@ -39,6 +39,12 @@ module.exports = (db) => {
     });
   };
 
+  /**
+   * Create a new request record (does not run any database consistency checks)
+   * @param {integer} resourceId the id for which to create the request
+   * @param {integer} requesterId the requesting user's id
+   * @returns a promise to a new request record
+   */
   const createNew = (resourceId, requesterId) => {
     return new Promise((resolve, reject) => {
       const query = {
@@ -58,8 +64,28 @@ module.exports = (db) => {
     });
   };
 
-  const update = () => {
-
+  /**
+   * Update a request record to mark it completed
+   * @param {integer} requestId
+   * @returns a promise to the updated request record
+   */
+  const markCompleted = (requestId) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `UPDATE requests SET completed_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *`,
+        values: [requestId],
+      };
+      db.query(query)
+        .then(res => {
+          const requestRecord = res.rows[0];
+          helpers.lg(`Updated request record (marked completed) for resource ID ${requestId}, requested by user with ID ${requestId}.`);
+          resolve(requestRecord);
+        })
+        .catch(err => {
+          helpers.lg(`Could not update request. ${err.detail}`);
+          reject(err);
+        });
+    });
   };
   
   
@@ -67,7 +93,7 @@ module.exports = (db) => {
     getAll,
     getOne,
     createNew,
-    update,
+    markCompleted,
   };
   
 };
