@@ -3,12 +3,16 @@ Currently in development.
 
 ## Dev Updates:
 May 11 (Johannes)
-- POST /requests now working! Request creation will only succeed if resource is available, that is,
+- ```GET /api/requests/from_me_for_others``` now working; returns all requests initiated by current user.
+- ```GET /api/requests/from_me_for_others/pending``` now working; returns all requests initiated by the current user that are still pending.
+- ```GET /api/requests/from_others_for_me``` now working. Will return all requests FOR the current user (pending or completed)
+- ```GET /api/requests/from_others_for_me/pending``` now working. Get all pending requests FOR the current user.
+- ```POST /requests``` now working! Request creation will only succeed if resource is available, that is,
   - it exists
   - it does not have an open request
   - it does not have a completed request that has completed less than env.BORROWING_SPAN_DAYS days ago
   - For more detail see flow chart for dynamic status determination available at https://github.com/merwynpgithub/decentralized-library/blob/master/Requests%20and%20Resource%20Status.pdf
-- PUT /requests/:id/complete now working. Request will be marked as completed
+- ```PUT /requests/:id/complete``` now working. Request will be marked as completed
   - if the request is in fact open
   - if the client session user owns the request
 
@@ -17,15 +21,15 @@ May 10 (Johannes)
   - Redundant status fields have been removed from resources and requests tables
   - requests table has an added completed_at field (from which status can be inferred)
   - Make sure to run /api/debug/reset before testing!
-- GET /resources will no longer have a status field for each resource
-- GET /resources/:id has status object (dynamically queried)
-- PUT /users now working. Expects full user object - fields missing in the user record will be deleted from database.
+- ```GET /resources``` will no longer have a status field for each resource
+- ```GET /resources/:id``` has status object (dynamically queried)
+- ```PUT /users``` now working. Expects full user object - fields missing in the user record will be deleted from database.
 
 May 9 (Johannes)
-- POST /login now working. Expects object with email address. Sets session cookie.
-- GET /logout now working. Destroys session.
-- GET /me will return the current user record if session is logged in.
-- GET /api/openlibrary/by_isbn/:isbn now working. Takes any isbn10 or isbn13 an object of this form (or an error):
+- ```POST /login``` now working. Expects object with email address. Sets session cookie.
+- ```GET /logout``` now working. Destroys session.
+- ```GET /me``` will return the current user record if session is logged in.
+- ```GET /api/openlibrary/by_isbn/:isbn``` now working. Takes any isbn10 or isbn13 an object of this form (or an error):
   ```
   {
     isbn: "0596516681",
@@ -38,7 +42,7 @@ May 9 (Johannes)
 
 May 8 (Johannes)
 - Schema: resources table now using strings for authors and genres fields (no separate tables)
-- POST /api/resources now working, expecting JSON data as follows (example):
+- ```POST /api/resources``` now working, expecting JSON data as follows (example):
   ```
   {
     "isbn": "9780261102439",
@@ -52,9 +56,9 @@ May 8 (Johannes)
   - ```isbn```, ```title``` and ```authors``` are required
   - ```description``` and ```genres``` are optional
   - The fields ```cover_image```, ```current_possessor```, ```owner``` and ```status``` are optional at this time as well. We'll likely supply that data on the backend once we've figured out sessions.
-- GET /api/users now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
-- GET /api/users/:id now functional
-- POST /api/users now working, expecting JSON data as follows (example):
+- ```GET /api/users``` now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
+- ```GET /api/users/:id``` now functional
+- ```POST /api/users``` now working, expecting JSON data as follows (example):
   ```
   {
     "first_name": "Elizabeth",
@@ -70,13 +74,13 @@ May 8 (Johannes)
   - returns the newly created record or an error
 
 May 7 (Johannes)
-- GET /api/resources now supporting more filtering (parameters as described below)
+- ```GET /api/resources``` now supporting more filtering (parameters as described below)
 
 May 6 (Johannes)
 - Created some seed data 
-- GET /api/debug/reset now functional
-- GET /api/resources now functional, with parameters as described below
-- GET /api/resouces/:id now functional
+- ```GET /api/debug/reset``` now functional
+- ```GET /api/resources``` now functional, with parameters as described below
+- ```GET /api/resouces/:id``` now functional
 
 ---
 ## Installation Instructions:
