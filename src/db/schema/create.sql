@@ -33,6 +33,7 @@ CREATE TABLE requests (
   id SERIAL PRIMARY KEY NOT NULL,
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
   requester_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  requestee_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   completed_at TIMESTAMP 
 );
