@@ -3,7 +3,11 @@ Currently in development.
 
 ## Dev Updates:
 May 12 (Johannes)
-- ```GET /api/requests/from_me_for_others``` and related routes will now return details on the resource and the requested user for each request.
+- _Schema adjustment!_
+  - _Make sure to run /api/debug/reset before testing!_
+  - requests table has an added requestee_id field that stores the id of the user to which each request is directed (that is, the person who possessed the requested resource at the time of the requeset)
+- ```GET /api/requests/from_me_for_others``` will now return details on the resource and the requested user (requestee) for each request.
+- ```GET /api/requests/from_others_for_me``` will now return details on the resource and the requesting user for each request.
 - ```GET /api/resources/mine``` now working
 
 May 11 (Johannes)
