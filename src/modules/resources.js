@@ -104,15 +104,35 @@ module.exports = (db) => {
   /**
    * Get data for all resources; order by title or most recent additions
    * @param {object} object containing orderby and limit properties
-   * @returns an array with resource objects
+   * @returns a promise to an array with resource objects
    */
   const getAll = (query) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const queryString = buildResourceSearchQuery(query);
       db.query(queryString)
         .then(({ rows: resources }) => {
           resolve(resources);
-        });
+        })
+        .catch(err => reject(err));
+    });
+  };
+
+  /**
+   * Get resources belonging to user
+   * @param {userId} userId
+   * @returns a promise to an array of resource objects
+   */
+  const getByOwner = (userId) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `SELECT * FROM resources WHERE owner_id = $1 ORDER BY title`,
+        values: [ userId ],
+      };
+      db.query(query)
+        .then(({ rows: resources }) => {
+          resolve(resources);
+        })
+        .catch(err => reject(err));
     });
   };
   
@@ -250,6 +270,7 @@ module.exports = (db) => {
 
   return {
     getAll,
+    getByOwner,
     getOne,
     exists,
     createNew,
