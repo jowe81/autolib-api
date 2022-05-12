@@ -43,12 +43,14 @@ module.exports = (db) => {
   /**
    * Get all records where userId is or has been requesting a resource
    * @param {integer} userId
+   * @param {boolean} pendingRequestsOnly set to true to only retrieve pending requests
    * @returns a promise to an array with request records
    */
-  const getByRequestingUser = (userId) => {
+  const getByRequestingUser = (userId, pendingRequestsOnly = false) => {
+    const pendingOnly = pendingRequestsOnly ? `AND completed_at IS NULL` : ``;
     return new Promise((resolve, reject) => {
       const query = {
-        text: `SELECT * FROM requests WHERE requester_id = $1 ORDER BY completed_at DESC, created_at`,
+        text: `SELECT * FROM requests WHERE requester_id = $1 ${pendingOnly} ORDER BY completed_at DESC, created_at`,
         values: [ userId ]
       };
       db.query(query)
