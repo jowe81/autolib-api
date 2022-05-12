@@ -78,7 +78,7 @@ module.exports = (db) => {
     resources.getOne(resourceId)
       .then(resource => {
         if (resource.status && resource.status.available) {
-          requests.createNew(resourceId, userId)
+          requests.createNew(resourceId, userId, resource.current_possessor_id)
             .then(requestRecord => {
               res.json(requestRecord);
             })
