@@ -18,7 +18,7 @@ module.exports = (db) => {
   });
 
   router.get("/resources", (req, res) => {
-    resources.getAll(req.query)
+    resources.getAll(req.query, true)
       .then(resources => {
         res.json(resources);
       })
