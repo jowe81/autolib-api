@@ -7,7 +7,7 @@ May 11 (Johannes)
 - ```GET /api/requests/from_me_for_others/pending``` now working; returns all requests initiated by the current user that are still pending.
 - ```GET /api/requests/from_others_for_me``` now working. Will return all requests FOR the current user (pending or completed)
 - ```GET /api/requests/from_others_for_me/pending``` now working. Get all pending requests FOR the current user.
-- ```POST /api/requests``` now working! Request creation will only succeed if resource is available, that is,
+- ```POST /api/requests``` now working! Expects a single property, ```resourceId```. Request creation will only succeed if resource is available, that is,
   - it exists
   - it does not have an open request
   - it does not have a completed request that has completed less than env.BORROWING_SPAN_DAYS days ago
