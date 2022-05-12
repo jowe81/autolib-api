@@ -96,6 +96,32 @@ Email suffices - password check not implemented.
 ### ```GET /me```
 Convenience route for dev purposes - returns current user.
 ## Resources
+### How Resource Status is determined
+
+There is no status field on either the resources table or the requests table. The API server will provide dynamically determined status information in a ```status``` property on each resource object. Here is how it works:
+![Determining Resource Status](./doc/img/dynamic_resource_status.png)
+### Resource object format
+#### Resource objects returned by the API take the following form:
+```
+{
+  id: 3,
+  isbn: "9781449399023",
+  title: "JavaScript & jQuery: The Missing Manual",
+  authors: "David Sawyer McFarland",
+  genres: "Programming, Javascript, Jquery",
+  description: "Javascript lets you supercharge your HTML with animation, interactivity, and visual effects. You will soon be building web pages that feel and act like desktop programs, without a lot of programming.",
+  cover_image: "https://covers.openlibrary.org/b/isbn/9781449399023-L.jpg",
+  current_possessor_id: 3,
+  owner_id: 3,
+  created_at: "2022-05-12T17:02:30.803Z",
+  updated_at: "2022-05-12T17:02:30.803Z",
+  status: {
+    available: false,
+    text: "requested"
+  }
+}
+
+```
 
 ### ```GET /api/resources```
 #### Retrieve/Search Catalogue of Resources
@@ -177,6 +203,7 @@ Example:
 ##### Returns ID of newly created resource.
 ### ```GET /api/resources/mine``` _(protected)_
 #### Returns all books/resources owned by the current user.
+
 
 ---
 ## Users
