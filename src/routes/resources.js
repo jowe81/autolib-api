@@ -6,6 +6,17 @@ module.exports = (db) => {
 
   const resources = require("../modules/resources")(db);
 
+  router.get("/resources/mine", (req, res) => {
+    resources.getByOwner(req.session.user.id)
+      .then(resources => {
+        helpers.lg(`${resources.length} resources are owned by ${req.session.user.email}`);
+        res.json(resources);
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  });
+
   router.get("/resources", (req, res) => {
     resources.getAll(req.query)
       .then(resources => {
