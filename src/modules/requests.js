@@ -53,9 +53,13 @@ module.exports = (db) => {
         text: `
           SELECT 
               requests.*,
+              users.first_name AS requestee_first_name,
+              users.last_name AS requestee_last_name,
+              users.email AS requestee_email,
               resources.title AS resource_title,
               resources.cover_image AS resource_cover_image            
             FROM requests 
+            JOIN users ON requests.requestee_id = users.id
             JOIN resources ON requests.resource_id = resources.id
             WHERE requester_id = $1 ${pendingOnly}
             ORDER BY completed_at DESC, created_at
@@ -116,11 +120,11 @@ module.exports = (db) => {
    * @param {integer} requesterId the requesting user's id
    * @returns a promise to a new request record
    */
-  const createNew = (resourceId, requesterId) => {
+  const createNew = (resourceId, requesterId, requesteeId) => {
     return new Promise((resolve, reject) => {
       const query = {
-        text: `INSERT INTO requests (resource_id, requester_id) VALUES ($1, $2) RETURNING *`,
-        values: [resourceId, requesterId],
+        text: `INSERT INTO requests (resource_id, requester_id, requestee_id) VALUES ($1, $2, $3) RETURNING *`,
+        values: [resourceId, requesterId, requesteeId],
       };
       db.query(query)
         .then(res => {
