@@ -10,7 +10,16 @@ module.exports = (db) => {
   router.get("/requests/from_me_for_others", errorIfUnauthorized, (req, res) => {
     requests.getByRequestingUser(req.session.user.id)
       .then(requestRecords => {
-        helpers.lg(`Got ${requestRecords.length} requests that were initiated by ${req.session.user.email}`);
+        helpers.lg(`Got ${requestRecords.length} requests that were initiated by ${req.session.user.email} (some may be completed).`);
+        res.json(requestRecords);
+      })
+      .catch(err => res.status(500).end(err));
+  });
+
+  router.get("/requests/from_me_for_others/pending", errorIfUnauthorized, (req, res) => {
+    requests.getByRequestingUser(req.session.user.id, true)
+      .then(requestRecords => {
+        helpers.lg(`Got ${requestRecords.length} pending requests that were initiated by ${req.session.user.email}`);
         res.json(requestRecords);
       })
       .catch(err => res.status(500).end(err));
