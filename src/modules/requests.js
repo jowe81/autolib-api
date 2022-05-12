@@ -35,6 +35,58 @@ module.exports = (db) => {
         })
         .catch(err => {
           helpers.lg(err);
+          reject(err);
+        });
+    });
+  };
+
+  /**
+   * Get all records where userId is or has been requesting a resource
+   * @param {integer} userId
+   * @returns a promise to an array with request records
+   */
+  const getByRequestingUser = (userId) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `SELECT * FROM requests WHERE requester_id = $1 ORDER BY completed_at DESC, created_at`,
+        values: [ userId ]
+      };
+      db.query(query)
+        .then(({ rows: requests }) => {
+          resolve(requests);
+        })
+        .catch(err => {
+          helpers.lg(err);
+          reject(err);
+        });
+    });
+  };
+
+  /**
+   * Get requests on resources that are currently in userId's possession
+   * @param {integer} userId
+   * @param {boolean} pendingRequestsOnly set to true to only retrieve pending requests
+   * @returns a promise to an array with request records
+   */
+  const getByRequestedUser = (userId, pendingRequestsOnly = false) => {
+    return new Promise((resolve, reject) => {
+      const pendingOnly = pendingRequestsOnly ? `AND completed_at IS NULL` : ``;
+      const query = {
+        text: `
+          SELECT requests.* FROM requests
+            JOIN resources ON requests.resource_id = resources.id
+            WHERE resources.current_possessor_id = $1 ${pendingOnly}
+            ORDER BY requests.completed_at DESC, requests.created_at
+        `,
+        values: [ userId ]
+      };
+      db.query(query)
+        .then(({ rows: requests }) => {
+          resolve(requests);
+        })
+        .catch(err => {
+          helpers.lg(err);
+          reject(err);
         });
     });
   };
@@ -91,6 +143,8 @@ module.exports = (db) => {
   
   return {
     getAll,
+    getByRequestingUser,
+    getByRequestedUser,
     getOne,
     createNew,
     markCompleted,
