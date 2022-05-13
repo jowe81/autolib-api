@@ -12,7 +12,11 @@ const getBookRecord = isbn => {
     helpers.lg(`Querying ${url}`);
     axios.get(url)
       .then(res => {
-        resolve(res.data);
+        if (res.status === 200) {
+          resolve(res.data);
+        } else {
+          reject(`Error: Record not found for ISBN ${isbn}`);
+        }
       })
       .catch(err => {
         reject(err);
@@ -73,25 +77,33 @@ const getCoverURL = (book, size = "L") => {
  */
 const getAutolibRecord = (isbn) => {
   return new Promise((resolve, reject) => {
-    helpers.lg(`Querying OpenLibrary with ISBN ${isbn}...`);
-    getBookRecord(isbn)
-      .then(book => {
-        getAuthorsString(book)
-          .then(authorsString => {
-            const autolibRecord = {};
-            autolibRecord.isbn = isbn;
-            autolibRecord.title = book.title;
-            autolibRecord.authors = authorsString;
-            autolibRecord.description = book.description ? book.description.value : undefined;
-            autolibRecord.cover_image = getCoverURL(book);
-            helpers.lg(`Successfully constructed autolib data from OL records.`);
-            resolve(autolibRecord);
-          });
-      })
-      .catch(err => {
-        helpers.lg(`Failed to retrieve OL data for ISBN ${isbn}`);
-        reject(err);
-      });
+    if (isbn) {
+      helpers.lg(`Querying OpenLibrary with ISBN ${isbn}...`);
+      getBookRecord(isbn)
+        .then(book => {
+          getAuthorsString(book)
+            .then(authorsString => {
+              const autolibRecord = {};
+              autolibRecord.isbn = isbn;
+              autolibRecord.title = book.title;
+              autolibRecord.authors = authorsString;
+              autolibRecord.description = book.description ? book.description.value : undefined;
+              autolibRecord.cover_image = getCoverURL(book);
+              helpers.lg(`Successfully constructed autolib data from OL records for "${autolibRecord.title}".`);
+              resolve(autolibRecord);
+            })
+            .catch(err => {
+              helpers.lg(`Failed to retrieve Author data for "${book.title}", ISBN ${isbn}.`);
+              reject(err);
+            });
+        })
+        .catch(err => {
+          helpers.lg(`Failed to retrieve OL data for ISBN ${isbn}.`);
+          reject(err);
+        });
+    } else {
+      reject(`Error: empty ISBN`);
+    }
   });
 };
 
