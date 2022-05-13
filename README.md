@@ -42,20 +42,7 @@ May 8 (Johannes)
   - The fields ```cover_image```, ```current_possessor```, ```owner``` and ```status``` are optional at this time as well. We'll likely supply that data on the backend once we've figured out sessions.
 - ```GET /api/users``` now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
 - ```GET /api/users/:id``` now functional
-- ```POST /api/users``` now working, expecting JSON data as follows (example):
-  ```
-  {
-    "first_name": "Elizabeth",
-    "last_name": "Williams",
-    "email": "elizabeth@gmail.com",
-    "street_address": "507 E 6th Ave",
-    "zip_code": "V5T 1K9",
-    "province": "BC",
-    "city": "Vancouver",
-    "country": "Canada"
-  }
-  ```
-  - returns the newly created record or an error
+- ```POST /api/users``` now working
 
 May 7 (Johannes)
 - ```GET /api/resources``` now supporting more filtering (parameters as described below)
