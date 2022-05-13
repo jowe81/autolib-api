@@ -2,6 +2,13 @@
 Currently in development.
 
 ## Dev Updates:
+May 13 (Johannes)
+- Implemented OpenLibrary batch retrieval tool in ```src/db/isbn-batching```. You probably won't need to use it yourself since I already updated the seed data, but here's how it works:
+  - ```cd src/db/isbn-batching```
+  - put text files with ISBNs into ```data``` diectory
+  - run ```node index.js ./data```
+  - The script will add resource records for the ISBNs in those files. The genre for each book record will default to the name of the respective text file.
+
 May 12 (Johannes)
 - _Schema adjustment!_
   - _Make sure to run /api/debug/reset before testing!_
