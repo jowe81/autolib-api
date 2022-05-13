@@ -28,23 +28,27 @@ const getBookRecord = isbn => {
 const getAuthorsString = book => {
   return new Promise((resolve, reject) => {
     const promises = [];
-    book.authors.forEach(authorObj => {
-      const url = `https://openlibrary.org${authorObj.key}.json`;
-      helpers.lg(`Querying ${url}`);
-      promises.push(axios.get(url));
-    });
-    Promise.all(promises)
-      .then(results => {
-        const names = [];
-        results.forEach(result => {
-          names.push(result.data.name);
-        });
-        const authorsString = names.join(', ');
-        resolve(authorsString);
-      })
-      .catch(err => {
-        reject(err);
+    if (book.authors && book.authors.length) {
+      book.authors.forEach(authorObj => {
+        const url = `https://openlibrary.org${authorObj.key}.json`;
+        helpers.lg(`Querying ${url}`);
+        promises.push(axios.get(url));
       });
+      Promise.all(promises)
+        .then(results => {
+          const names = [];
+          results.forEach(result => {
+            names.push(result.data.name);
+          });
+          const authorsString = names.join(', ');
+          resolve(authorsString);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    } else {
+      resolve('N/A');
+    }
   });
 };
 
@@ -79,7 +83,7 @@ const getAutolibRecord = (isbn) => {
             autolibRecord.title = book.title;
             autolibRecord.authors = authorsString;
             autolibRecord.description = book.description ? book.description.value : undefined;
-            autolibRecord.coverImage = getCoverURL(book);
+            autolibRecord.cover_image = getCoverURL(book);
             helpers.lg(`Successfully constructed autolib data from OL records.`);
             resolve(autolibRecord);
           });
