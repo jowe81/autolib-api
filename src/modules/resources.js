@@ -165,8 +165,8 @@ module.exports = (db) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `
-          INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, status)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;
+          INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
         `,
         values: [
           reqBody.isbn,
@@ -177,7 +177,6 @@ module.exports = (db) => {
           reqBody.cover_image,
           reqBody.current_possessor_id,
           ownerId,
-          reqBody.status || 'available',
         ]
       };
       db.query(query)
