@@ -187,7 +187,7 @@ module.exports = (db) => {
         })
         .catch(err => {
           reject(err);
-          helpers.lg(err);
+          helpers.lg(`Could not insert record into resources table: `, err);
         });
     });
   };
