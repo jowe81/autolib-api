@@ -3,6 +3,7 @@ Currently in development.
 
 ## Dev Updates:
 May 14 (Johannes)
+- Implemented search over all fields: ```GET /api/resources?find=term``` will return matches for ```term``` on title, authors, genres, and description.
 - Run ```/api/debug/reset``` for the latest seed data updates.
   - Now 76 books from these genres: children, production, programming, theology, thrillers
   - Should have no more dead links to covers.
