@@ -75,7 +75,7 @@ const getCoverURL = (book, size = "L") => {
  * @param {string} isbn the ISBN for the book requested
  * @returns a promise to an object with isbn, title, authors, description, and coverImage properties
  */
-const getAutolibRecord = (isbn) => {
+const getAutolibRecord = (isbn, verifyCoverImage = true) => {
   return new Promise((resolve, reject) => {
     if (isbn) {
       helpers.lg(`Querying OpenLibrary with ISBN ${isbn}...`);
@@ -89,8 +89,27 @@ const getAutolibRecord = (isbn) => {
               autolibRecord.authors = authorsString;
               autolibRecord.description = book.description ? book.description.value : undefined;
               autolibRecord.cover_image = getCoverURL(book);
-              helpers.lg(`Successfully constructed autolib data from OL records for "${autolibRecord.title}".`);
-              resolve(autolibRecord);
+              if (verifyCoverImage && autolibRecord.cover_image) {
+                helpers.lg(`Attempting to verify cover ${autolibRecord.cover_image}`);
+                axios.get(autolibRecord.cover_image)
+                  .then(res => {
+                    const validTypes = ['image/jpeg', 'image/jpg'];
+                    if (validTypes.includes(res.headers['content-type'].toLocaleLowerCase())) {
+                      helpers.lg(`Successfully constructed autolib data from OL records for "${autolibRecord.title}". Verfied cover URL.`);
+                      resolve(autolibRecord);
+                    } else {
+                      helpers.lg(`Constructed autolib data from OL records for "${autolibRecord.title}". Could not verify cover - discarded URL.`);
+                      reject(`Unable to verify cover URL for "${autolibRecord.title}"`);
+                    }
+                  }).catch(err => {
+                    helpers.lg(`Failed to retrieve cover from ${autolibRecord.cover_image} for "${book.title}", ISBN ${isbn}. Discarding URL.`);
+                    delete autolibRecord.cover_image;
+                    resolve(autolibRecord);
+                  });
+              } else {
+                helpers.lg(`Successfully constructed autolib data from OL records for "${autolibRecord.title}". No cover URL.`);
+                resolve(autolibRecord);
+              }
             })
             .catch(err => {
               helpers.lg(`Failed to retrieve Author data for "${book.title}", ISBN ${isbn}.`);
