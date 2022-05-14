@@ -156,6 +156,25 @@ module.exports = (db) => {
   };
 
   /**
+   * Get random resource records
+   * @param {integer} limit Maximum # of records to return
+   * @returns a promise to an array with resource objects
+   */
+  const getRandom = (limit) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `SELECT * FROM resources ORDER BY random() LIMIT $1`,
+        values: [ limit ],
+      };
+      db.query(query)
+        .then(({rows: resources}) => {
+          resolve(resources);
+        })
+        .catch(err => reject(err));
+    });
+  };
+
+  /**
    * Get resources belonging to user
    * @param {userId} userId
    * @returns a promise to an array of resource objects
@@ -307,6 +326,7 @@ module.exports = (db) => {
 
   return {
     getAll,
+    getRandom,
     getByOwner,
     getOne,
     exists,
