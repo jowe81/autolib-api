@@ -95,6 +95,9 @@ module.exports = (db) => {
     case "id":
       order = `ORDER BY id`;
       break;
+    default:
+      order = `ORDER BY title`;
+      break;
     }
 
     //Assemble LIMIT clause
