@@ -3,8 +3,10 @@ Currently in development.
 
 ## Dev Updates:
 May 14 (Johannes)
+- Run ```/api/debug/reset``` for the latest seed data updates.
+  - Now 76 books from these genres: children, production, programming, theology, thrillers
+  - Should have no more dead links to covers.
 - Implemented cover image verification on OpenLibrary module. Backend will verify that an OL supplied cover image is retrievable or otherwise discard the URL.
-- Seed data: now 76 books from these genres: children, production, programming, theology, thrillers
 - ```GET /api/resources``` now defaults to order by title if ```?order_by``` is not supplied
 
 May 13 (Johannes)
