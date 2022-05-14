@@ -2,6 +2,11 @@
 Currently in development.
 
 ## Dev Updates:
+May 14 (Johannes)
+- Implemented cover image verification on OpenLibrary module. Backend will verify that an OL supplied cover image is retrievable or otherwise discard the URL.
+- Seed data: now 76 books from these genres: children, production, programming, theology, thrillers
+- ```GET /api/resources``` now defaults to order by title if ```?order_by``` is not supplied
+
 May 13 (Johannes)
 - Implemented OpenLibrary batch retrieval tool in ```src/db/isbn-batching```. You probably won't need to use it yourself since I already updated the seed data, but here's how it works:
   - ```cd src/db/isbn-batching```
