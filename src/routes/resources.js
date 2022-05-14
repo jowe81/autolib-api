@@ -17,8 +17,22 @@ module.exports = (db) => {
       });
   });
 
+  router.get("/resources/random", (req, res) => {
+    resources.getRandom(req.query.limit)
+      .then(resources => {
+        helpers.lg(`Picked ${resources.length} random resources.`);
+        res.json(resources);
+      })
+      .catch(err => {
+        helpers.lg(`Error: could not select random resources.`);
+        res.status(500).end(err);
+      });
+  });
+
   router.get("/resources", (req, res) => {
-    resources.getAll(req.query, true)
+    const withStatus = req.query.withStatus !== undefined;
+    console.log(req.query.withStatus, withStatus);
+    resources.getAll(req.query, withStatus)
       .then(resources => {
         res.json(resources);
       })
