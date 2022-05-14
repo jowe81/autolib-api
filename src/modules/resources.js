@@ -54,18 +54,32 @@ module.exports = (db) => {
    * @returns SQL string
    */
   const buildResourceSearchQuery = query => {
-
     //Assemble WHERE clause
     let where = ``;
-    if (query.title) {
-      where += ` AND LOWER(resources.title) LIKE '%${helpers.lowerAndEscape(query.title)}%'`;
+    
+    if (query.find) {
+      //If find= is provided, search over everything: title, authors, genres, description
+      where += ` AND 
+      (
+        LOWER(resources.title) LIKE '%${helpers.lowerAndEscape(query.find)}%'
+        OR LOWER(resources.authors) LIKE '%${helpers.lowerAndEscape(query.find)}%'
+        OR LOWER(resources.genres) LIKE '%${helpers.lowerAndEscape(query.find)}%'
+        OR LOWER(resources.description) LIKE '%${helpers.lowerAndEscape(query.find)}%'
+      )
+     `;
+    } else {
+      //find= is not present, check for other criteria
+      if (query.title) {
+        where += ` AND LOWER(resources.title) LIKE '%${helpers.lowerAndEscape(query.title)}%'`;
+      }
+      if (query.author) {
+        where += ` AND LOWER(resources.authors) LIKE '%${helpers.lowerAndEscape(query.author)}%'`;
+      }
+      if (query.genre) {
+        where += ` AND LOWER(resources.genres) LIKE '%${helpers.lowerAndEscape(query.genre)}%'`;
+      }
     }
-    if (query.author) {
-      where += ` AND LOWER(resources.authors) LIKE '%${helpers.lowerAndEscape(query.author)}%'`;
-    }
-    if (query.genre) {
-      where += ` AND LOWER(resources.genres) LIKE '%${helpers.lowerAndEscape(query.genre)}%'`;
-    }
+
     if (query.owner_id) {
       where += ` AND resources.owner_id = ${helpers.sanitizeId(query.owner_id)}`;
     }
@@ -107,6 +121,7 @@ module.exports = (db) => {
       SELECT * FROM resources
       ${where} ${order} ${limit}
     `;
+    
     return q;
   };
 
