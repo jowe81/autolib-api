@@ -3,6 +3,7 @@ Currently in development.
 
 ## Dev Updates:
 May 14 (Johannes)
+- Implemented random selection of sources: ```GET /api/resources/random?limit=n``` will return up to ```n``` random resource records
 - Implemented search over all fields: ```GET /api/resources?find=term``` will return matches for ```term``` on title, authors, genres, and description.
 - Run ```/api/debug/reset``` for the latest seed data updates.
   - Now 76 books from these genres: children, production, programming, theology, thrillers
@@ -129,9 +130,14 @@ There is no status field on either the resources table or the requests table. Th
 }
 
 ```
-
 ### ```GET /api/resources```
 #### Retrieve/Search Catalogue of Resources
+- Note that by default the status object will not be present on each record
+- To include the status object with the response, add ```withStatus``` as a query parameter like so:
+  ```
+  GET /api/resources?withStatus
+  ```
+
 ##### Get all:
 ```
 #Get all
@@ -170,6 +176,13 @@ GET /api/resources?order_by=title
 
 #Order by most recently added
 GET /api/resources?order_by=created_at 
+```
+
+### ```GET /api/resources/random```
+#### Retrieve randomly selected resource records from the database
+##### Get a maximum of 5 resources:
+```
+GET /api/resources/random?limit=5
 ```
 
 
