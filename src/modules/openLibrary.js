@@ -102,7 +102,7 @@ const getAutolibRecord = (isbn, verifyCoverImage = true) => {
                       reject(`Unable to verify cover URL for "${autolibRecord.title}"`);
                     }
                   }).catch(err => {
-                    helpers.lg(`Failed to retrieve cover from ${autolibRecord.cover_image} for "${book.title}", ISBN ${isbn}. Discarding URL.`);
+                    helpers.lg(`Failed to retrieve cover from ${autolibRecord.cover_image} for "${book.title}", ISBN ${isbn}. Discarding URL. ${err}`);
                     delete autolibRecord.cover_image;
                     resolve(autolibRecord);
                   });
