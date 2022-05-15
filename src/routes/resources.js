@@ -31,9 +31,9 @@ module.exports = (db) => {
 
   router.get("/resources", (req, res) => {
     const withStatus = req.query.withStatus !== undefined;
-    console.log(req.query.withStatus, withStatus);
     resources.getAll(req.query, withStatus)
       .then(resources => {
+        helpers.lg(`Returning ${resources.length} resources.`);
         res.json(resources);
       })
       .catch(err => {
