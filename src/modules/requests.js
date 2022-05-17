@@ -2,6 +2,8 @@ const helpers = require("../modules/helpers");
 
 module.exports = (db) => {
   
+  const resources = require("./resources")(db);
+
   /**
    * Get an object with the request record
    * @param {integer} requestId
@@ -150,11 +152,21 @@ module.exports = (db) => {
         text: `UPDATE requests SET completed_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *`,
         values: [requestId],
       };
+      helpers.lg(`Updating request ${requestId}...`);
       db.query(query)
         .then(res => {
           const requestRecord = res.rows[0];
           helpers.lg(`Updated request record (marked completed) for resource ID ${requestId}, requested by user with ID ${requestId}.`);
-          resolve(requestRecord);
+          resources.transfer(requestRecord.resource_id, requestRecord.requester_id)
+            .then((resourceRecord) => {
+              helpers.lg(`Completed transfer - updated resource record for resource "${resourceRecord.title}" (id ${resourceRecord.id}) to new possessor ${resourceRecord.current_possessor_id}.`);
+              resolve(requestRecord);
+            })
+            .catch(err => {
+              const msg = `Failed to complete request and transfer resource ${requestRecord.resource_id}. ${err}`;
+              helpers.lg(msg);
+              reject(msg);
+            });
         })
         .catch(err => {
           helpers.lg(`Could not update request. ${err.detail}`);
