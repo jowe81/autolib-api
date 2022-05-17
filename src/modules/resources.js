@@ -8,9 +8,20 @@ module.exports = (db) => {
    * @param {integer} resourceId
    * @returns an object with the resource record
    */
-  const getOne = (resourceId, withStatus = true) => {
+  const getOne = (resourceId, withStatus = true, withAddress = true) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM resources WHERE id = $1::integer`, [ helpers.sanitizeId(resourceId) ])
+      db.query(`
+        SELECT
+          resources.*,
+          users.street_address,
+          users.zip_code,
+          users.city,
+          users.province
+
+        FROM resources
+        JOIN users ON resources.current_possessor_id = users.id
+        WHERE resources.id = $1::integer
+      `, [ helpers.sanitizeId(resourceId) ])
         .then(({ rows: records }) => {
           if (records.length > 0) {
             const record = records[0];
@@ -229,7 +240,31 @@ module.exports = (db) => {
     });
   };
 
-  
+  /**
+   * Transfer a resource to a new borrower
+   * @param {integer} resourceId the ID of the resource
+   * @param {integer} newPossessorId the ID of the new borrower
+   * @returns a promise that resolves with the updated resource record on sucess, rejects on failure
+   */
+  const transfer = (resourceId, newPossessorId) => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `UPDATE resources SET current_possessor_id = $1 WHERE id = $2 RETURNING *`,
+        values: [newPossessorId, resourceId]
+      };
+      db.query(query)
+        .then(res => {
+          const updatedRecord = res.rows[0];
+          helpers.lg(`Transferred resource ${resourceId} successfully to user ${newPossessorId}`);
+          resolve(updatedRecord);
+        })
+        .catch(err => {
+          const msg = `Could not update resources possessor id for resoures ${resourceId}. ${err}`;
+          helpers.lg(msg);
+          reject(msg);
+        });
+    });
+  };
    
 
   /**
@@ -331,6 +366,7 @@ module.exports = (db) => {
     getOne,
     exists,
     createNew,
+    transfer,
     getPendingRequests,
     getStatus,
   };
