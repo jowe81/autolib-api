@@ -2,6 +2,10 @@
 Currently in development.
 
 ## Dev Updates:
+May 17 (Johannes)
+- ```GET /api/resources/:id``` now returns current location of the book (address)
+- Fixed problem with request completion: resource record should now be properly updated with the new ```current_possessor_id``` when a request is completed.
+
 May 14 (Johannes)
 - Implemented random selection of sources: ```GET /api/resources/random?limit=n``` will return up to ```n``` random resource records
 - Implemented search over all fields: ```GET /api/resources?find=term``` will return matches for ```term``` on title, authors, genres, and description.
@@ -108,34 +112,32 @@ Convenience route for dev purposes - returns current user.
 
 There is no status field on either the resources table or the requests table. The API server will provide dynamically determined status information in a ```status``` property on each resource object. Here is how it works:
 ![Determining Resource Status](./doc/img/dynamic_resource_status.png)
-### Resource object format
-#### Resource objects returned by the API take the following form:
-```
-{
-  id: 3,
-  isbn: "9781449399023",
-  title: "JavaScript & jQuery: The Missing Manual",
-  authors: "David Sawyer McFarland",
-  genres: "Programming, Javascript, Jquery",
-  description: "Javascript lets you supercharge your HTML with animation, interactivity, and visual effects. You will soon be building web pages that feel and act like desktop programs, without a lot of programming.",
-  cover_image: "https://covers.openlibrary.org/b/isbn/9781449399023-L.jpg",
-  current_possessor_id: 3,
-  owner_id: 3,
-  created_at: "2022-05-12T17:02:30.803Z",
-  updated_at: "2022-05-12T17:02:30.803Z",
-  status: {
-    available: false,
-    text: "requested"
-  }
-}
 
-```
+
+
+
 ### ```GET /api/resources```
 #### Retrieve/Search Catalogue of Resources
 - Note that by default the status object will not be present on each record
 - To include the status object with the response, add ```withStatus``` as a query parameter like so:
   ```
   GET /api/resources?withStatus
+  ```
+- Format of resource objects returned:
+  ```
+  {
+    id: 73,
+    isbn: "9780060652388",
+    title: "A grief observed",
+    authors: "C. S. Lewis",
+    genres: "Theology",
+    description: null,
+    cover_image: "https://covers.openlibrary.org/b/isbn/0060652381-L.jpg",
+    current_possessor_id: 8,
+    owner_id: 4,
+    created_at: "2022-05-14T17:52:04.321Z",
+    updated_at: "2022-05-14T17:52:04.321Z"
+  }
   ```
 
 ##### Get all:
@@ -191,6 +193,31 @@ GET /api/resources/random?limit=5
 ##### Get the resource with id 3:
 ```
 GET /api/resources/3
+```
+This will return a resource object with full details including current status and address as follows:
+```
+{
+  id: 38,
+  isbn: "9781430219545",
+  title: "Beginning Java™ EE 6 Platform with GlassFish™ 3",
+  authors: "António Gonçalves",
+  genres: "Programming",
+  description: null,
+  cover_image: "https://covers.openlibrary.org/b/isbn/9781430219545-L.jpg",
+  current_possessor_id: 8,
+  owner_id: 4,
+  created_at: "2022-05-14T17:41:59.446Z",
+  updated_at: "2022-05-14T17:41:59.446Z",
+  street_address: "1255 Devonshire Crescent",
+  zip_code: "V6H 2G2",
+  city: "Vancouver",
+  province: "BC",
+  status: {
+    available: false,
+    text: "in use",
+    availableAt: "2022-05-31T16:30:25.839Z"
+  }
+}
 ```
 
 ### ```POST /api/resources``` _(protected)_
