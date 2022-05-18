@@ -182,20 +182,25 @@ module.exports = (db) => {
    */
   const remove = requestId => {
     return new Promise((resolve, reject) => {
-      const query = {
-        text: `DELETE FROM requests WHERE id = $1 RETURNING *`,
-        values: [requestId],
-      };
-      helpers.lg(`Removing request ${requestId}...`);
-      db.query(query)
-        .then(res => {
-          const requestRecord = res.rows[0];
-          helpers.lg(`Deleted request record with ID ${requestId}.`);
-          resolve(requestRecord);
-        })
-        .catch(err => {
-          helpers.lg(`Could not delete request with ID ${requestId}. ${err.detail}`);
-          reject(err);
+      getOne(requestId)
+        .then(requestRecord => {
+          if (requestRecord.completed_at === null) {
+            const query = {
+              text: `DELETE FROM requests WHERE id = $1 RETURNING *`,
+              values: [requestId],
+            };
+            helpers.lg(`Removing request ${requestId}...`);
+            db.query(query)
+              .then(res => {
+                const requestRecord = res.rows[0];
+                helpers.lg(`Deleted request record with ID ${requestId}.`);
+                resolve(requestRecord);
+              });
+          } else {
+            const msg = `Cannot delete a request that's already completed.`;
+            helpers.lg(msg);
+            reject(msg);
+          }
         });
     });
   };
