@@ -209,9 +209,11 @@ module.exports = (db) => {
   /**
    * Take data from post request and create new resource record
    * @param {object} reqBody
+   * @param {integer} ownerId
+   * @param {integer} currentPossessorId defaults to ownerId if omitted
    * @returns a promise to the new returning record
    */
-  const createNew = (reqBody, ownerId) => {
+  const createNew = (reqBody, ownerId, currentPossessorId) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `
@@ -225,7 +227,7 @@ module.exports = (db) => {
           reqBody.genres,
           reqBody.description,
           reqBody.cover_image,
-          reqBody.current_possessor_id,
+          currentPossessorId || ownerId,
           ownerId,
         ]
       };
