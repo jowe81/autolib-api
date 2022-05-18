@@ -3,6 +3,8 @@ Currently in development.
 
 ## Dev Updates:
 May 17 (Johannes)
+- ```DELETE /api/resources/:id``` now works: deletes/undoes the request with the given ID
+- ```GET /api/resources/random``` will no longer return resources without a cover image 
 - ```GET /api/resources/:id``` now returns current location of the book (address)
 - Fixed problem with request completion: resource record should now be properly updated with the new ```current_possessor_id``` when a request is completed.
 
@@ -294,6 +296,12 @@ Request creation will only succeed if resource is available, that is,
 #### Request with given id will be marked as completed
   - if the request is in fact open
   - if the client session user owns the request
+
+
+### ```DELETE /api/resources/:id``` _(protected)_
+#### Request with given id will be deleted/undone
+  - if the client session user owns the request
+  - if the request is open
 ### ```GET /api/requests/from_me_for_others``` _(protected)_
 #### Returns all requests initiated by current user (pending or completed), in descending chronological order.
 
