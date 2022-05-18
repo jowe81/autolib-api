@@ -72,6 +72,25 @@ module.exports = (db) => {
       });
   });
 
+  router.delete("/requests/:id", errorIfUnauthorized, (req, res) => {
+    const id = helpers.sanitizeId(req.params.id);
+    requests.getOne(id)
+      .then(requestRecord => {
+        if (requestRecord.requester_id === req.session.user.id) {
+          requests.remove(id)
+            .then(requestRecord => {
+              helpers.lg(`Removed request ${id} from database.`);
+              res.json(requestRecord);
+            })
+            .catch(err => res.status(500).end(err));
+        } else {
+          helpers.lg(`User ${req.session.user.id} tried to delete/undo a request they do not own or one that doesn't exist.`);
+          res.status(500).end(`Unable to delete request.`);
+        }
+      })
+      .catch(err => res.status(500).end(err));
+  });
+
   router.post("/requests", errorIfUnauthorized, (req, res) => {
     const userId = req.session.user.id;
     const resourceId = req.body.resourceId;
