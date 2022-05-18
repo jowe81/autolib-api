@@ -18,7 +18,7 @@ module.exports = (db) => {
   });
 
   router.get("/resources/random", (req, res) => {
-    resources.getRandom(req.query.limit)
+    resources.getRandom(req.query.limit, true)
       .then(resources => {
         helpers.lg(`Picked ${resources.length} random resources.`);
         res.json(resources);
