@@ -2,6 +2,9 @@
 Currently in development.
 
 ## Dev Updates:
+May 18 (Johannes)
+- Fixed problem with creating a new resource: ```current_possessor_id``` now defaults to the user creating the record
+
 May 17 (Johannes)
 - ```DELETE /api/resources/:id``` now works: deletes/undoes the request with the given ID
 - ```GET /api/resources/random``` will no longer return resources without a cover image 
