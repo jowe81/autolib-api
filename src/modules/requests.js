@@ -175,7 +175,31 @@ module.exports = (db) => {
     });
   };
   
-  
+  /**
+   * Delete request by ID
+   * @param {integer} requestId
+   * @returns a promise to the deletion of the request
+   */
+  const remove = requestId => {
+    return new Promise((resolve, reject) => {
+      const query = {
+        text: `DELETE FROM requests WHERE id = $1 RETURNING *`,
+        values: [requestId],
+      };
+      helpers.lg(`Removing request ${requestId}...`);
+      db.query(query)
+        .then(res => {
+          const requestRecord = res.rows[0];
+          helpers.lg(`Deleted request record with ID ${requestId}.`);
+          resolve(requestRecord);
+        })
+        .catch(err => {
+          helpers.lg(`Could not delete request with ID ${requestId}. ${err.detail}`);
+          reject(err);
+        });
+    });
+  };
+
   return {
     getAll,
     getByRequestingUser,
@@ -183,6 +207,7 @@ module.exports = (db) => {
     getOne,
     createNew,
     markCompleted,
+    remove,
   };
   
 };
