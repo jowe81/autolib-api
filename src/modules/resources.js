@@ -4,11 +4,11 @@ module.exports = (db) => {
 
   
   /**
-   * Get an object with the resource record
+   * Get an object with the resource record, including its current location (dynamically determined)
    * @param {integer} resourceId
    * @returns an object with the resource record
    */
-  const getOne = (resourceId, withStatus = true, withAddress = true) => {
+  const getOne = (resourceId, withStatus = true) => {
     return new Promise((resolve, reject) => {
       db.query(`
         SELECT
@@ -169,12 +169,14 @@ module.exports = (db) => {
   /**
    * Get random resource records
    * @param {integer} limit Maximum # of records to return
+   * @param {boolean} withCoverOnly set true to only return resource that have a cover URL
    * @returns a promise to an array with resource objects
    */
-  const getRandom = (limit) => {
+  const getRandom = (limit, withCoverOnly) => {
     return new Promise((resolve, reject) => {
+      const coverOnly = withCoverOnly ? `WHERE cover_image IS NOT NULL` : ``;
       const query = {
-        text: `SELECT * FROM resources ORDER BY random() LIMIT $1`,
+        text: `SELECT * FROM resources ${coverOnly} ORDER BY random() LIMIT $1`,
         values: [ limit ],
       };
       db.query(query)
