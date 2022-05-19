@@ -8,6 +8,9 @@ const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 
+
+global.__basedir = __dirname;
+
 const app = express();
 
 const db = require("./db");
@@ -49,11 +52,13 @@ const application = (ENV) => {
   const requests = require("./routes/requests");
   const session = require("./routes/session");
   const openLibrary = require("./routes/openLibrary");
+  const covers = require("./routes/covers");
   app.use("/", session(db));
   app.use("/api", users(db));
   app.use("/api", resources(db));
   app.use("/api", requests(db));
   app.use("/api", openLibrary());
+  app.use("/api", covers());
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
