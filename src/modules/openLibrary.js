@@ -62,12 +62,16 @@ const getAuthorsString = book => {
  * @param {string} size L, M or S
  * @returns a cover URL or undefined
  */
-const getCoverURL = (book, size = "L") => {
+const getCoverURL = (book, size = "L", getObject = false) => {
   const isbn13 = book.isbn_13 && book.isbn_13.length ? book.isbn_13[0] : undefined;
   const isbn10 = book.isbn_10 && book.isbn_10.length ? book.isbn_10[0] : undefined;
-  const isbn = isbn13 || isbn10;
-  const coverURL = isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-${size.toUpperCase()}.jpg` : undefined;
-  return coverURL;
+  const isbn = isbn13 || isbn10 || book.isbn;
+  const filename = `${isbn}-${size.toUpperCase()}.jpg`;
+  const coverURL = isbn ? `https://covers.openlibrary.org/b/isbn/${filename}` : undefined;
+
+  const result = getObject ? { coverURL, filename } : coverURL;
+
+  return result;
 };
 
 /**
@@ -127,5 +131,6 @@ const getAutolibRecord = (isbn, verifyCoverImage = true) => {
 };
 
 module.exports = {
+  getCoverURL,
   getAutolibRecord,
 };
