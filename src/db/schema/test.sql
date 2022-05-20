@@ -1,26 +1,26 @@
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Stephanie', 'Smith', 'stephanie@gmail.com', '356 10th Avenue Bikeway', 'V5Y 1S3', 'Vancouver', 'BC', 'Canada', '6042355778');
+VALUES ('Stephanie', 'Smith', 'stephanie@gmail.com', '356 10th Avenue Bikeway', 'V5Y 1S3', 'Vancouver', 'British Columbia', 'Canada', '6042355778');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Mark', 'Spencer', 'mark@gmail.com', '2812 Alberta St', 'V5Y 1T8', 'Vancouver', 'BC', 'Canada', '6044535577');
+VALUES ('Mark', 'Spencer', 'mark@gmail.com', '2812 Alberta St', 'V5Y 1T8', 'Vancouver', 'British Columbia', 'Canada', '6044535577');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Tanya', 'Shoemaker', 'tanya@gmail.com', '106 E 18th Ave', 'V5V 1E3', 'Vancouver', 'BC', 'Canada', '6047772213');
+VALUES ('Tanya', 'Shoemaker', 'tanya@gmail.com', '106 E 18th Ave', 'V5V 1E3', 'Vancouver', 'British Columbia', 'Canada', '6047772213');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Ryan', 'Sayson', 'ryan@gmail.com', '3616 W 3rd Ave', 'V6R 1L9', 'Vancouver', 'BC', 'Canada', '7781012203');
+VALUES ('Ryan', 'Sayson', 'ryan@gmail.com', '3616 W 3rd Ave', 'V6R 1L9', 'Vancouver', 'British Columbia', 'Canada', '7781012203');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('John', 'Chung', 'john@gmail.com', '2005 W 43rd Ave', 'V6M 2C8', 'Vancouver', 'BC', 'Canada', '7782203369');
+VALUES ('John', 'Chung', 'john@gmail.com', '2005 W 43rd Ave', 'V6M 2C8', 'Vancouver', 'British Columbia', 'Canada', '7782203369');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Lyndon', 'Mariner', 'lyndon@gmail.com', '4888 Selkirk St', 'V6H 3A3', 'Vancouver', 'BC', 'Canada', '6049789959');
+VALUES ('Lyndon', 'Mariner', 'lyndon@gmail.com', '4888 Selkirk St', 'V6H 3A3', 'Vancouver', 'British Columbia', 'Canada', '6049789959');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Mariah', 'MacLeod', 'mariah@gmail.com', '1225 Nanton Ave', 'V6H 2C7', 'Vancouver', 'BC', 'Canada', '6041134446');
+VALUES ('Mariah', 'MacLeod', 'mariah@gmail.com', '1225 Nanton Ave', 'V6H 2C7', 'Vancouver', 'British Columbia', 'Canada', '6041134446');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Carolin', 'McDonald', 'carolin@gmail.com', '1255 Devonshire Crescent', 'V6H 2G2', 'Vancouver', 'BC', 'Canada', '6041066904');
+VALUES ('Carolin', 'McDonald', 'carolin@gmail.com', '1255 Devonshire Crescent', 'V6H 2G2', 'Vancouver', 'British Columbia', 'Canada', '6041066904');
 
 
 
