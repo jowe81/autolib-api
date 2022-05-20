@@ -12,6 +12,7 @@ CREATE TABLE users (
   city VARCHAR(255),
   province VARCHAR(255), 
   country VARCHAR(255),
+  phone VARCHAR(50),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
 
