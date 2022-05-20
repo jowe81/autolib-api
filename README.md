@@ -3,6 +3,7 @@ Currently in development.
 
 ## Dev Updates:
 May 20 (Johannes)
+- Autologin on register: on a succesful request to ```POST /users``` the session will now be logged in
 - Add field for phone number, support in user routes
 
 May 18 (Johannes)
