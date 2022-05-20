@@ -29,8 +29,9 @@ module.exports = (db) => {
 
   router.post("/users", (req, res) => {
     users.createNew(req.body)
-      .then(result => {
-        res.json(result);
+      .then(userRecord => {
+        res.json(userRecord);
+        req.session.user = userRecord;
       })
       .catch(err => {
         res.status(500).send(err);
