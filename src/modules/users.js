@@ -69,8 +69,8 @@ module.exports = (db) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `
-          INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
+          INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;
         `,
         values: [
           reqBody.first_name,
@@ -80,7 +80,8 @@ module.exports = (db) => {
           reqBody.zip_code,
           reqBody.city,
           reqBody.province,
-          reqBody.country
+          reqBody.country,
+          reqBody.phone
         ]
       };
       db.query(query)
