@@ -12,10 +12,19 @@ In this README (click to scroll to section):
 
 
 # <a name="api-docs"></a> API Documentation
-## Debug/Reset
+
+Contents:
+- [Debug/Reset](#debug-reset)
+- [OpenLibrary data retrieval](#olib)
+- [Requests](#requests) (RESTful resource)
+- [Resources](#resources) (RESTful resource)
+- [Users](#users) (RESTful resource)
+- [Session](#session)
+
+## <a name="debug-reset"></a> Debug/Reset
 ### ```GET /api/debug/reset```
 Recreate tables and seed the database.
-## OpenLibrary data retrieval
+## <a name="olib"></a> OpenLibrary data retrieval
 ### ```GET /api/openlibrary/by_isbn/:isbn```
 #### Retrieve book information by ISBN through http://openlibrary.org
 ##### Takes any ISBN10 or ISBN13 and will return an object of this form (or an error):
