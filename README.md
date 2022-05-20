@@ -2,6 +2,9 @@
 Currently in development.
 
 ## Dev Updates:
+May 20 (Johannes)
+- Add field for phone number, support in user routes
+
 May 18 (Johannes)
 - Fixed problem with creating a new resource: ```current_possessor_id``` now defaults to the user creating the record
 
