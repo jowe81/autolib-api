@@ -1,10 +1,13 @@
 # API Backend for AutoLib
 Currently in development.
 
+See [API documentation](#api-docs) below
 ## Dev Updates:
 May 20 (Johannes)
 - Autologin on register: on a succesful request to ```POST /users``` the session will now be logged in
 - Add field for phone number, support in user routes
+- _Schema adjustment!_
+  - _Make sure to run /api/debug/reset before testing!_
 
 May 18 (Johannes)
 - Fixed problem with creating a new resource: ```current_possessor_id``` now defaults to the user creating the record
@@ -85,7 +88,7 @@ May 6 (Johannes)
 
 ---
 
-# API Documentation
+# <a name="api-docs"></a> API Documentation
 ## Debug/Reset
 ### ```GET /api/debug/reset```
 Recreate tables and seed the database.
@@ -275,7 +278,8 @@ Example:
   "zip_code": "V5T 1K9",
   "province": "BC",
   "city": "Vancouver",
-  "country": "Canada"
+  "country": "Canada",
+  "phone": "123-456-7890"
 }
 ```
 ##### Returns newly created record or an error
