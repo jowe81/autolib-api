@@ -116,8 +116,9 @@ module.exports = (db) => {
                 zip_code = $5,
                 city = $6,
                 province = $7,
-                country = $8
-              WHERE id = $9
+                country = $8,
+                phone = $9
+              WHERE id = $10
               RETURNING *;
             `,
             values: [
@@ -129,6 +130,7 @@ module.exports = (db) => {
               reqBody.city,
               reqBody.province,
               reqBody.country,
+              reqBody.phone,
               user.id,
             ]
           };
