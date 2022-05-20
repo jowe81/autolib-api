@@ -1,92 +1,15 @@
 # API Backend for AutoLib
 Currently in development.
 
-See [API documentation](#api-docs) below
-## Dev Updates:
-May 20 (Johannes)
-- Autologin on register: on a succesful request to ```POST /users``` the session will now be logged in
-- Add field for phone number, support in user routes
-- _Schema adjustment!_
-  - _Make sure to run /api/debug/reset before testing!_
+In this README (click to scroll to section):
 
-May 18 (Johannes)
-- Fixed problem with creating a new resource: ```current_possessor_id``` now defaults to the user creating the record
+- [API documentation](#api-docs)
+- [Installation instructions](#install)
+- [Development log](#dev-log)
+<br/>
+<br/>
+<br/>
 
-May 17 (Johannes)
-- ```DELETE /api/resources/:id``` now works: deletes/undoes the request with the given ID
-- ```GET /api/resources/random``` will no longer return resources without a cover image 
-- ```GET /api/resources/:id``` now returns current location of the book (address)
-- Fixed problem with request completion: resource record should now be properly updated with the new ```current_possessor_id``` when a request is completed.
-
-May 14 (Johannes)
-- Implemented random selection of sources: ```GET /api/resources/random?limit=n``` will return up to ```n``` random resource records
-- Implemented search over all fields: ```GET /api/resources?find=term``` will return matches for ```term``` on title, authors, genres, and description.
-- Run ```/api/debug/reset``` for the latest seed data updates.
-  - Now 76 books from these genres: children, production, programming, theology, thrillers
-  - Should have no more dead links to covers.
-- Implemented cover image verification on OpenLibrary module. Backend will verify that an OL supplied cover image is retrievable or otherwise discard the URL.
-- ```GET /api/resources``` now defaults to order by title if ```?order_by``` is not supplied
-
-May 13 (Johannes)
-- Implemented OpenLibrary batch retrieval tool in ```src/db/isbn-batching```. You probably won't need to use it yourself since I already updated the seed data, but here's how it works:
-  - ```cd src/db/isbn-batching```
-  - put text files with ISBNs into ```data``` diectory
-  - run ```node index.js ./data```
-  - The script will add resource records for the ISBNs in those files. The genre for each book record will default to the name of the respective text file.
-
-May 12 (Johannes)
-- _Schema adjustment!_
-  - _Make sure to run /api/debug/reset before testing!_
-  - requests table has an added requestee_id field that stores the id of the user to which each request is directed (that is, the person who possessed the requested resource at the time of the requeset)
-- ```GET /api/requests/from_me_for_others``` will now return details on the resource and the requested user (requestee) for each request.
-- ```GET /api/requests/from_others_for_me``` will now return details on the resource and the requesting user for each request.
-- ```GET /api/resources/mine``` now working
-
-May 11 (Johannes)
-- ```GET /api/requests/from_me_for_others``` now working
-- ```GET /api/requests/from_me_for_others/pending``` now working
-- ```GET /api/requests/from_others_for_me``` now working
-- ```GET /api/requests/from_others_for_me/pending``` now working
-- ```POST /api/requests``` now working
-- ```PUT /requests/:id/complete``` now working
-- ```GET /api/resources``` now supports ```?order_by=authors```, ```?order_by=genres```
-
-May 10 (Johannes)
-- _Schema adjustment!_ 
-  - _Make sure to run /api/debug/reset before testing!_
-  - Redundant status fields have been removed from resources and requests tables
-  - requests table has an added completed_at field (from which status can be inferred)
-- ```GET /resources``` and ```GET /resources/:id``` now have status object (dynamically queried) instead of string
-- ```PUT /users``` now working. Expects full user object - fields missing in the user record will be deleted from database.
-
-May 9 (Johannes)
-- ```POST /login``` now working. Expects object with email address. Sets session cookie.
-- ```GET /logout``` now working. Destroys session.
-- ```GET /me``` will return the current user record if session is logged in.
-- ```GET /api/openlibrary/by_isbn/:isbn``` now working
-
-May 8 (Johannes)
-- Schema: resources table now using strings for authors and genres fields (no separate tables)
-- ```POST /api/resources``` now working
-  - returns the newly created record or an error
-  - ```isbn```, ```title``` and ```authors``` are required
-  - ```description``` and ```genres``` are optional
-  - The fields ```cover_image```, ```current_possessor```, ```owner``` and ```status``` are optional at this time as well. We'll likely supply that data on the backend once we've figured out sessions.
-- ```GET /api/users``` now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
-- ```GET /api/users/:id``` now functional
-- ```POST /api/users``` now working
-
-May 7 (Johannes)
-- ```GET /api/resources``` now supporting more filtering (parameters as described below)
-
-May 6 (Johannes)
-- Created some seed data 
-- ```GET /api/debug/reset``` now functional
-- ```GET /api/resources``` now functional, with parameters as described below
-- ```GET /api/resouces/:id``` now functional
-
-
----
 
 # <a name="api-docs"></a> API Documentation
 ## Debug/Reset
@@ -324,10 +247,13 @@ Request creation will only succeed if resource is available, that is,
 
 ### ```GET /api/requests/from_others_for_me/pending``` _(protected)_
 #### Convenience route. Returns only _pending_ requests _for_ the current user, in descending chronological order.
+---
+<br/>
+<br/>
+<br/>
 
----
----
-## Installation Instructions:
+# <a name="install"></a> Installation Instructions
+
 1. Clone repository and change into app directory
 ```
   git clone https://github.com/jowe81/autolib-api && cd autolib-api
@@ -356,3 +282,93 @@ Request creation will only succeed if resource is available, that is,
 ```
 
 7. _IMPORTANT_: Visit http://localhost:8001/api/debug/reset to create the tables and seed the database
+
+<br/>
+<br/>
+<br/>
+
+# <a name="dev-log"></a> Development Log
+
+May 20 (Johannes)
+- Autologin on register: on a succesful request to ```POST /users``` the session will now be logged in
+- Add field for phone number, support in user routes
+- _Schema adjustment!_
+  - _Make sure to run /api/debug/reset before testing!_
+
+May 18 (Johannes)
+- Fixed problem with creating a new resource: ```current_possessor_id``` now defaults to the user creating the record
+
+May 17 (Johannes)
+- ```DELETE /api/resources/:id``` now works: deletes/undoes the request with the given ID
+- ```GET /api/resources/random``` will no longer return resources without a cover image 
+- ```GET /api/resources/:id``` now returns current location of the book (address)
+- Fixed problem with request completion: resource record should now be properly updated with the new ```current_possessor_id``` when a request is completed.
+
+May 14 (Johannes)
+- Implemented random selection of sources: ```GET /api/resources/random?limit=n``` will return up to ```n``` random resource records
+- Implemented search over all fields: ```GET /api/resources?find=term``` will return matches for ```term``` on title, authors, genres, and description.
+- Run ```/api/debug/reset``` for the latest seed data updates.
+  - Now 76 books from these genres: children, production, programming, theology, thrillers
+  - Should have no more dead links to covers.
+- Implemented cover image verification on OpenLibrary module. Backend will verify that an OL supplied cover image is retrievable or otherwise discard the URL.
+- ```GET /api/resources``` now defaults to order by title if ```?order_by``` is not supplied
+
+May 13 (Johannes)
+- Implemented OpenLibrary batch retrieval tool in ```src/db/isbn-batching```. You probably won't need to use it yourself since I already updated the seed data, but here's how it works:
+  - ```cd src/db/isbn-batching```
+  - put text files with ISBNs into ```data``` diectory
+  - run ```node index.js ./data```
+  - The script will add resource records for the ISBNs in those files. The genre for each book record will default to the name of the respective text file.
+
+May 12 (Johannes)
+- _Schema adjustment!_
+  - _Make sure to run /api/debug/reset before testing!_
+  - requests table has an added requestee_id field that stores the id of the user to which each request is directed (that is, the person who possessed the requested resource at the time of the requeset)
+- ```GET /api/requests/from_me_for_others``` will now return details on the resource and the requested user (requestee) for each request.
+- ```GET /api/requests/from_others_for_me``` will now return details on the resource and the requesting user for each request.
+- ```GET /api/resources/mine``` now working
+
+May 11 (Johannes)
+- ```GET /api/requests/from_me_for_others``` now working
+- ```GET /api/requests/from_me_for_others/pending``` now working
+- ```GET /api/requests/from_others_for_me``` now working
+- ```GET /api/requests/from_others_for_me/pending``` now working
+- ```POST /api/requests``` now working
+- ```PUT /requests/:id/complete``` now working
+- ```GET /api/resources``` now supports ```?order_by=authors```, ```?order_by=genres```
+
+May 10 (Johannes)
+- _Schema adjustment!_ 
+  - _Make sure to run /api/debug/reset before testing!_
+  - Redundant status fields have been removed from resources and requests tables
+  - requests table has an added completed_at field (from which status can be inferred)
+- ```GET /resources``` and ```GET /resources/:id``` now have status object (dynamically queried) instead of string
+- ```PUT /users``` now working. Expects full user object - fields missing in the user record will be deleted from database.
+
+May 9 (Johannes)
+- ```POST /login``` now working. Expects object with email address. Sets session cookie.
+- ```GET /logout``` now working. Destroys session.
+- ```GET /me``` will return the current user record if session is logged in.
+- ```GET /api/openlibrary/by_isbn/:isbn``` now working
+
+May 8 (Johannes)
+- Schema: resources table now using strings for authors and genres fields (no separate tables)
+- ```POST /api/resources``` now working
+  - returns the newly created record or an error
+  - ```isbn```, ```title``` and ```authors``` are required
+  - ```description``` and ```genres``` are optional
+  - The fields ```cover_image```, ```current_possessor```, ```owner``` and ```status``` are optional at this time as well. We'll likely supply that data on the backend once we've figured out sessions.
+- ```GET /api/users``` now functional (returns all users, not filterable, we probably do not need this in production at all - convenience functionality for now)
+- ```GET /api/users/:id``` now functional
+- ```POST /api/users``` now working
+
+May 7 (Johannes)
+- ```GET /api/resources``` now supporting more filtering (parameters as described below)
+
+May 6 (Johannes)
+- Created some seed data 
+- ```GET /api/debug/reset``` now functional
+- ```GET /api/resources``` now functional, with parameters as described below
+- ```GET /api/resouces/:id``` now functional
+
+
