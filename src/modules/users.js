@@ -67,6 +67,7 @@ module.exports = (db) => {
    */
   const createNew = (reqBody) => {
     return new Promise((resolve, reject) => {
+      if (!reqBody.first_name || !reqBody.email || !reqBody.last_name) return reject(`First name, last name or email missing`);
       const query = {
         text: `
           INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
