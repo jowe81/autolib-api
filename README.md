@@ -298,6 +298,9 @@ Request creation will only succeed if resource is available, that is,
 
 # <a name="dev-log"></a> Development Log
 
+May 21 (Johannes)
+- ```POST /users``` now returns an error if trying to register with an empty string for first_name, last_name or email
+
 May 20 (Johannes)
 - Autologin on register: on a succesful request to ```POST /users``` the session will now be logged in
 - Add field for phone number, support in user routes
