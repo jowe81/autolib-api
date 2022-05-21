@@ -100,7 +100,7 @@ module.exports = (db) => {
             FROM requests
             JOIN users ON requests.requester_id = users.id
             JOIN resources ON requests.resource_id = resources.id
-            WHERE resources.current_possessor_id = $1 ${pendingOnly}
+            WHERE requests.requestee_id = $1 ${pendingOnly}
             ORDER BY requests.completed_at DESC, requests.created_at DESC
         `,
         values: [ userId ]
