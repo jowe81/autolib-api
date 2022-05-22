@@ -55,6 +55,9 @@ const application = (ENV) => {
   app.use("/api", requests(db));
   app.use("/api", openLibrary());
 
+  const errorHandler = require("./middleware/errorHandler");
+  app.use(errorHandler);
+
   if (ENV === "development" || ENV === "test") {
     Promise.all([
       read(path.resolve(__dirname, `db/schema/create.sql`)),
