@@ -1,9 +1,8 @@
-const helpers = require("../modules/helpers");
-
 const errorIfUnauthorized = (req, res, next) => {
   if (!(req.session && req.session.user)) {
-    helpers.lg(`Unauthorized request (must be logged in).`);
-    res.status(401).end("Not authorized - must be logged in.");
+    const err = new Error(`Unauthorized request (must be logged in).`);
+    err.statusCode = 401;
+    next(err);
   } else {
     next();
   }
