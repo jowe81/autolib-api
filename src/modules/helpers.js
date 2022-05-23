@@ -1,4 +1,5 @@
 const ENV = require("../environment");
+const chalk = require("chalk");
 
 /**
  * Return an integer >= 0
@@ -49,8 +50,16 @@ const addDays = (date, days) => {
  */
 const lg = (msg) => {
   if (ENV === "development") {
-    console.log(msg);
+    console.log(chalk.bgGray.green(` `) + ` ${msg}`);
   }
+};
+
+/**
+ * Log error to console with markup
+ * @param {object} err
+ */
+const lgErr = err => {
+  console.log(chalk.bgGray.green(` `) + chalk.bgRed.white(` ERROR: `) + ` ${err.message}`);
 };
 
 module.exports = {
@@ -59,4 +68,5 @@ module.exports = {
   daysBetween,
   addDays,
   lg,
+  lgErr,
 };
