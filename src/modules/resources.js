@@ -31,15 +31,15 @@ module.exports = (db) => {
                   record.status = status;
                   resolve(record);
                 })
-                .catch(err => reject(err));
+                .catch(reject);
             } else {
               resolve(record);
             }
           } else {
-            resolve({});
+            reject(new Error(`Resource does not exist`));
           }
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -55,7 +55,7 @@ module.exports = (db) => {
           const exists = resourceRecord.id > 0 ? true : false;
           resolve(exists);
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -157,12 +157,12 @@ module.exports = (db) => {
               .then(resources => {
                 resolve(resources);
               })
-              .catch(err => reject(err));
+              .catch(reject);
           } else {
             resolve(resources);
           }
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -183,7 +183,7 @@ module.exports = (db) => {
         .then(({rows: resources}) => {
           resolve(resources);
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -202,7 +202,7 @@ module.exports = (db) => {
         .then(({ rows: resources }) => {
           resolve(resources);
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
   
@@ -237,10 +237,7 @@ module.exports = (db) => {
           resolve(newRecord);
           helpers.lg(`Inserted new resource ${newRecord.title} with ID ${newRecord.id} successfully.`);
         })
-        .catch(err => {
-          reject(err);
-          helpers.lg(`Could not insert record into resources table: `, err);
-        });
+        .catch(reject);
     });
   };
 
