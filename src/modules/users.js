@@ -1,4 +1,3 @@
-const req = require("express/lib/request");
 const helpers = require("../modules/helpers");
 
 module.exports = (db) => {
@@ -17,10 +16,10 @@ module.exports = (db) => {
             const record = records[0];
             resolve(record);
           } else {
-            resolve({});
+            reject(new Error(`Couldn't find a user with id ${userId}`));
           }
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -36,10 +35,10 @@ module.exports = (db) => {
             const record = records[0];
             resolve(record);
           } else {
-            reject(`Couldn't find a user with email ${email}`);
+            reject(new Error(`Couldn't find a user with email ${email}`));
           }
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -49,14 +48,12 @@ module.exports = (db) => {
    */
   const getAll = () => {
     return new Promise((resolve, reject) => {
-      const queryString = `SELECT * FROM users;`;
+      const queryString = `SELECT * FROM ussers;`;
       db.query(queryString)
         .then(({ rows: resources }) => {
           resolve(resources);
         })
-        .catch(err => {
-          helpers.lg(err);
-        });
+        .catch(reject);
     });
   };
   
@@ -91,10 +88,7 @@ module.exports = (db) => {
           resolve(newRecord);
           helpers.lg(`Inserted new user ${newRecord.first_name} ${newRecord.last_name} with ID ${newRecord.id} successfully.`);
         })
-        .catch(err => {
-          reject(err);
-          helpers.lg(err);
-        });
+        .catch(reject);
     });
   };
 
@@ -143,10 +137,11 @@ module.exports = (db) => {
               helpers.lg(`Updated user with ID ${userId} successfully.`);
             })
             .catch(err => {
+              err.debug = `Couldn't update user with ID ${userId}`;
               reject(err);
-              helpers.lg(`Couldn't update user with ID ${userId}. ${err.detail}`);
             });
-        });
+        })
+        .catch(reject);
     });
   };
 

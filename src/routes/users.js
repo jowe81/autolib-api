@@ -27,25 +27,21 @@ module.exports = (db) => {
       });
   });
 
-  router.post("/users", (req, res) => {
+  router.post("/users", (req, res, next) => {
     users.createNew(req.body)
       .then(userRecord => {
         res.json(userRecord);
         req.session.user = userRecord;
       })
-      .catch(err => {
-        res.status(500).send(err);
-      });
+      .catch(next);
   });
 
-  router.put("/users", errorIfUnauthorized, (req, res) => {
+  router.put("/users", errorIfUnauthorized, (req, res, next) => {
     users.update(req.body, req.session.user.id)
       .then(result => {
         res.json(result);
       })
-      .catch(err => {
-        res.status(500).send(err);
-      });
+      .catch(next);
   });
 
   return router;
