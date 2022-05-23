@@ -1,9 +1,8 @@
 const helpers = require("../modules/helpers");
 
 const errorHandler = (err, req, res, next) => {
-  const debugMessage = err.debug ? `${err.debug} -` : ``;
-  helpers.lg(`ERROR: ${debugMessage} ${err.message}`);
   err.statusCode = err.statusCode || 500;
+  err.clientMessage = err.message || err.detail;
   res.status(err.statusCode).send(err);
 };
 
