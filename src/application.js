@@ -27,8 +27,6 @@ const read = (file) => {
   });
 };
 
-
-
 const application = (ENV) => {
   
   //Enable sessions
@@ -55,6 +53,7 @@ const application = (ENV) => {
   app.use("/api", requests(db));
   app.use("/api", openLibrary());
 
+  //Use custom error handler
   const errorHandler = require("./middleware/errorHandler");
   app.use(errorHandler);
 
