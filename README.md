@@ -1,5 +1,7 @@
 # API Backend for AutoLib
-This is the backend for _Autolib_ by LighthouseLabs students Cherie, Merwyn and Johannes. Get the front-end app at https://github.com/merwynpgithub/autolib/.
+This is the backend for _Autolib_ by LighthouseLabs students [Chérie](https://github.com/cherieodu), [Merwyn](https://github.com/merwynpgithub) and [Johannes](https://github.com/jowe81).
+
+Get the front-end app at https://github.com/merwynpgithub/autolib/.
 
 In this README (click to scroll to section):
 
