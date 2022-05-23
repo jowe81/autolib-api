@@ -297,6 +297,8 @@ Request creation will only succeed if resource is available, that is,
 <br/>
 
 # <a name="dev-log"></a> Development Log
+May 22 (Johannes)
+- Implement error-handling middleware and refactor error handling across the app
 
 May 21 (Johannes)
 - Problem with ```GET /requests/from_others_for_me``` fixed. Returns correct request records now.
