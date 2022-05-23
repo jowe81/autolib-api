@@ -5,16 +5,14 @@ module.exports = (db) => {
 
   const users = require("../modules/users")(db);
 
-  router.post("/login", (req, res) => {
+  router.post("/login", (req, res, next) => {
     const email = req.body.email;
     users.findByEmail(email)
       .then(user => {
         req.session.user = user;
         res.json(user);
       })
-      .catch(err => {
-        res.status(500).send(err);
-      });
+      .catch(next);
   });
 
   router.get("/logout", errorIfUnauthorized, (req, res) => {
