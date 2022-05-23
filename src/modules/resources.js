@@ -259,11 +259,7 @@ module.exports = (db) => {
           helpers.lg(`Transferred resource ${resourceId} successfully to user ${newPossessorId}`);
           resolve(updatedRecord);
         })
-        .catch(err => {
-          const msg = `Could not update resources possessor id for resoures ${resourceId}. ${err}`;
-          helpers.lg(msg);
-          reject(msg);
-        });
+        .catch(reject);
     });
   };
    
