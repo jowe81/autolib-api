@@ -100,8 +100,8 @@ module.exports = (db) => {
             })
             .catch(next);
         } else {
-          helpers.lg(`Cannot create request - resource is unavailable.`);
-          res.json({ "error": "resource unavailable"});
+          const err = new Error(`Cannot create request - resource is unavailable.`);
+          next(err);
         }
       })
       .catch(next);
