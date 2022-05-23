@@ -20,7 +20,7 @@ module.exports = (db) => {
             resolve({});
           }
         })
-        .catch(err => reject(err));
+        .catch(reject);
     });
   };
 
@@ -72,10 +72,7 @@ module.exports = (db) => {
         .then(({ rows: requests }) => {
           resolve(requests);
         })
-        .catch(err => {
-          helpers.lg(err);
-          reject(err);
-        });
+        .catch(reject);
     });
   };
 
@@ -109,10 +106,7 @@ module.exports = (db) => {
         .then(({ rows: requests }) => {
           resolve(requests);
         })
-        .catch(err => {
-          helpers.lg(err);
-          reject(err);
-        });
+        .catch(reject);
     });
   };
 
@@ -134,10 +128,7 @@ module.exports = (db) => {
           helpers.lg(`Generated request record for resource ID ${resourceId}, requested by user with ID ${requesterId}.`);
           resolve(requestRecord);
         })
-        .catch(err => {
-          helpers.lg(`Could not create request. ${err.detail}`);
-          reject(err);
-        });
+        .catch(reject);
     });
   };
 
@@ -162,16 +153,9 @@ module.exports = (db) => {
               helpers.lg(`Completed transfer - updated resource record for resource "${resourceRecord.title}" (id ${resourceRecord.id}) to new possessor ${resourceRecord.current_possessor_id}.`);
               resolve(requestRecord);
             })
-            .catch(err => {
-              const msg = `Failed to complete request and transfer resource ${requestRecord.resource_id}. ${err}`;
-              helpers.lg(msg);
-              reject(msg);
-            });
+            .catch(reject);
         })
-        .catch(err => {
-          helpers.lg(`Could not update request. ${err.detail}`);
-          reject(err);
-        });
+        .catch(reject);
     });
   };
   
@@ -189,7 +173,6 @@ module.exports = (db) => {
               text: `DELETE FROM requests WHERE id = $1 RETURNING *`,
               values: [requestId],
             };
-            helpers.lg(`Removing request ${requestId}...`);
             db.query(query)
               .then(res => {
                 const requestRecord = res.rows[0];
@@ -197,9 +180,8 @@ module.exports = (db) => {
                 resolve(requestRecord);
               });
           } else {
-            const msg = `Cannot delete a request that's already completed.`;
-            helpers.lg(msg);
-            reject(msg);
+            const err = new Error(`Cannot delete a request that's already completed.`);
+            reject(err);
           }
         });
     });
