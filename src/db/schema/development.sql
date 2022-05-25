@@ -20,7 +20,10 @@ INSERT INTO users (first_name, last_name, email, street_address, zip_code, city,
 VALUES ('Mariah', 'MacLeod', 'mariah@gmail.com', '1225 Nanton Ave', 'V6H 2C7', 'Vancouver', 'British Columbia', 'Canada', '6041134446');
 
 INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
-VALUES ('Carolin', 'McDonald', 'carolin@gmail.com', '1255 Devonshire Crescent', 'V6H 2G2', 'Vancouver', 'British Columbia', 'Canada', '6041066904');
+VALUES ('Chérie', 'Oduwole', 'cherie@gmail.com', '1255 Devonshire Crescent', 'V6H 2G2', 'Vancouver', 'British Columbia', 'Canada', '6042466904');
+
+INSERT INTO users (first_name, last_name, email, street_address, zip_code, city, province, country, phone)
+VALUES ('Merwyn', 'Patrick', 'merwyn@gmail.com', '3048 Venebles St', 'V5K 2S1', 'Vancouver', 'British Columbia', 'Canada', '6042355778');
 
 
 
@@ -68,7 +71,6 @@ INSERT INTO resources (isbn, title, authors, genres, description, cover_image, c
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9781449370824', 'Java in a Nutshell: A Desktop Quick Reference', 'Benjamin J Evans, David Flanagan', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9781449370824-L.jpg', 6, 7, '2022-05-14 10:41:59.445016', '2022-05-14 10:41:59.445016');
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9780596100575', 'DNS and BIND', 'Cricket Liu, Paul Albitz', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9780596100575-L.jpg', 6, 8, '2022-05-14 10:41:59.445774', '2022-05-14 10:41:59.445774');
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9781430219545', 'Beginning Java™ EE 6 Platform with GlassFish™ 3', 'António Gonçalves', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9781430219545-L.jpg', 2, 4, '2022-05-14 10:41:59.44661', '2022-05-14 10:41:59.44661');
-INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9781430219569', 'Pro JPA 2', 'Mike Keith', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9781430219569-L.jpg', 5, 5, '2022-05-14 10:41:59.447127', '2022-05-14 10:41:59.447127');
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9780596516680', 'Head First Servlets and JSP', 'Bert Bates, Bryan Basham', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9780596516680-L.jpg', 7, 2, '2022-05-14 10:41:59.448638', '2022-05-14 10:41:59.448638');
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9780596009205', 'Head first Java', 'Kathy Sierra', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9780596009205-L.jpg', 3, 3, '2022-05-14 10:41:59.448947', '2022-05-14 10:41:59.448947');
 INSERT INTO resources (isbn, title, authors, genres, description, cover_image, current_possessor_id, owner_id, created_at, updated_at) VALUES ('9780596009823', 'Learning UML 2.0', 'N/A', 'Programming', NULL, 'https://covers.openlibrary.org/b/isbn/9780596009823-L.jpg', 3, 5, '2022-05-14 10:41:59.449168', '2022-05-14 10:41:59.449168');
