@@ -5,6 +5,7 @@ const errorHandler = (err, req, res, next) => {
   err.clientMessage = err.message || err.detail;
   res.status(err.statusCode).send(err);
   helpers.lgErr(err);
+  next();
 };
 
 module.exports = errorHandler;

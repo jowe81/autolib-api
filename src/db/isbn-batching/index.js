@@ -15,7 +15,6 @@ const resources = require("../../modules/resources")(db);
 const ol = require("../../modules/openlibrary");
 const fs = require('fs');
 const path = require('path');
-const { rejects } = require("assert");
 console.log(`Attempting to read ${isbnDir}...`);
 
 
